@@ -50,7 +50,7 @@ export default function useAttendance() {
       if (response.ok) {
         setEmployeeInfo(result.employee);
         setAttendanceLog(result.attendanceLog);
-        setEmployeeStatus(result.logType === 'IN' ? STATUS.CLOCKED_IN : STATUS.CLOCKED_OUT);
+        setEmployeeStatus(result.logType === 'CLAIMED' && result.flag !== 1 ? STATUS.CLAIMED : STATUS.CLAIMED_ALREADY);
         setError(null);
         playSuccess();
       } else {

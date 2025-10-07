@@ -1,4 +1,4 @@
-# RFID Attendance System
+# FREE MEAL MONITORING SYSTEM
 
 A modern, comprehensive attendance management system built with Next.js that uses RFID technology for seamless employee check-in/check-out tracking. The system features a beautiful, responsive interface with real-time attendance monitoring, administrative controls, and comprehensive reporting capabilities.
 

@@ -4,7 +4,6 @@
 export const ACCOUNT_ROLES = [
   { id: "superadmin", name: "Super Admin" },
   { id: "admin", name: "Admin" },
-  { id: "security", name: "Security" },
   { id: "hr", name: "HR" }
 ];
 

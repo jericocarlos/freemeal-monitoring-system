@@ -42,7 +42,7 @@ export default function EmployeePhoto({ employeeInfo, employeeStatus }) {
       {/* Status badge moved below photo */}
       <motion.div 
         className={`py-4 px-12 rounded-full ${
-          employeeStatus === 'Claimed' 
+          employeeStatus === 'CLAIMED' 
             ? 'bg-green-600 text-white' 
             : 'bg-red-600 text-white'
         }`}

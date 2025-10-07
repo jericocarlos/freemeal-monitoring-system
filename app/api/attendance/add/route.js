@@ -43,7 +43,7 @@ export async function POST(request) {
 
     // Step 1: Get latest free meal log for this user
     const latestLogQuery = `
-      SELECT id, log_type, time_claimed
+      SELECT id, log_type, time_claimed, flag
       FROM freemeal_logs
       WHERE ashima_id = ?
       ORDER BY time_claimed DESC
@@ -55,7 +55,7 @@ export async function POST(request) {
     let insertLogQuery = "";
     let insertLogValues = [];
 
-    if (!latestLog || latestLog.log_type === "OUT" || (latestLog.log_type === "CLAIMED" && latestLog.out_time)) {
+    if (!latestLog || (latestLog.log_type === "CLAIMED" && latestLog.flag === '')) {
       // No log, or last log is OUT, or last IN already paired: this should be a new IN
       nextLogType = "CLAIMED";
       insertLogQuery = `
@@ -63,19 +63,17 @@ export async function POST(request) {
         VALUES (?, 'CLAIMED', NOW())
       `;
       insertLogValues = [employee.ashima_id];
-    } 
-    
-    // else if (latestLog.log_type === "CLAIMED") {
-    //   // Last log is CLAIMED and has no out_time: this should be OUT and update the previous CLAIMED
-    //   nextLogType = "OUT";
-    //   // Update the previous CLAIMED with out_time and log_type OUT
-    //   const updateQuery = `
-    //     UPDATE freemeal_logs
-    //     SET log_type = 'OUT', out_time = NOW()
-    //     WHERE id = ?
-    //   `;
-    //   await executeQuery({ query: updateQuery, values: [latestLog.id] });
-    // }
+    } else if (latestLog.log_type === "CLAIMED" && !latestLog.flag) {
+      // Last log is CLAIMED and has no out_time: this should be OUT and update the previous CLAIMED
+      nextLogType = "CLAIMED ALREADY";
+      // Update the previous CLAIMED with out_time and log_type OUT
+      const updateQuery = `
+        UPDATE freemeal_logs
+        SET log_type = 'CLAIMED ALREADY', flag = 1
+        WHERE id = ?
+      `;
+      await executeQuery({ query: updateQuery, values: [latestLog.id] });
+    }
 
     // Only do insert if this is a new CLAIMED
     if (insertLogQuery) {

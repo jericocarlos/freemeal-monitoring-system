@@ -51,14 +51,15 @@ export default function Home() {
                 animate={{ opacity: [0.6, 1, 0.6] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               >
-                Please Tap Your ID Card
+                Please Tap Your ID Card In Claiming Your Free Meal
               </motion.h2>
             </motion.div>
           )}
         </AnimatePresence>
 
         {/* Employee data display */}
-        <AnimatePresence>
+        <AnimatePresence>1334683099
+          
           {employeeInfo && (
             <motion.div 
               className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center"

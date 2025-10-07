@@ -6,7 +6,7 @@ const dbConfig = {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'rfid_attendance',
+  database: 'db_freemeal',
 };
 
 async function createUser(name, username, employeeId, password, role = 'admin') {
