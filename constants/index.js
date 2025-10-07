@@ -18,6 +18,6 @@ export const API = {
 
 // Status types
 export const STATUS = {
-  CLOCKED_IN: 'Clocked In',
-  CLOCKED_OUT: 'Clocked Out',
+  CLOCKED_IN: 'Claimed',
+  //CLOCKED_OUT: 'Already Claimed Today',
 };

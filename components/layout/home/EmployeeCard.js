@@ -68,7 +68,7 @@ export default function EmployeeCard({ employeeInfo, attendanceLog, employeeStat
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.25, type: "spring", stiffness: 120 }}
       >
-        <h3 className="text-3xl font-bold mb-6">Attendance Record</h3>
+        <h3 className="text-3xl font-bold mb-6">Free Meal Record</h3>
         
         {attendanceLog && (
           <div className="grid grid-cols-2 gap-8">
@@ -78,23 +78,9 @@ export default function EmployeeCard({ employeeInfo, attendanceLog, employeeStat
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.35, duration: 0.18, type: "spring", stiffness: 120 }}
             >
-              <p className="text-2xl text-green-300">TIME IN</p>
+              <p className="text-2xl text-green-300">TIME CLAIMED</p>
               <p className="text-5xl font-bold">
-                {formatTime(attendanceLog.in_time)}
-              </p>
-            </motion.div>
-            
-            <motion.div 
-              className={`p-6 rounded-xl ${attendanceLog.out_time 
-                ? 'bg-red-500/20 border border-red-500/30' 
-                : 'bg-gray-500/20 border border-gray-500/30'}`}
-              initial={{ x: 16, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.38, duration: 0.18, type: "spring", stiffness: 120 }}
-            >
-              <p className="text-2xl text-red-300">TIME OUT</p>
-              <p className="text-5xl font-bold">
-                {formatTime(attendanceLog.out_time)}
+                {formatTime(attendanceLog.time_claimed)}
               </p>
             </motion.div>
           </div>

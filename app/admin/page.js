@@ -15,7 +15,7 @@ import {
 /**
  * Admin Dashboard Component
  * 
- * Main dashboard page for the RFID Attendance System admin interface.
+ * Main dashboard page for the Free Meal Monitoring System admin interface.
  * Provides an overview of system statistics, quick access to modules based on
  * user permissions, and personalized user experience.
  * 

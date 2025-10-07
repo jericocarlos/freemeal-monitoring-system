@@ -41,41 +41,43 @@ export async function POST(request) {
       employee.photo = `data:image/png;base64,${Buffer.from(employee.photo).toString('base64')}`;
     }
 
-    // Step 1: Get latest attendance log for this user
+    // Step 1: Get latest free meal log for this user
     const latestLogQuery = `
-      SELECT id, log_type, in_time, out_time
-      FROM attendance_logs
+      SELECT id, log_type, time_claimed
+      FROM freemeal_logs
       WHERE ashima_id = ?
-      ORDER BY in_time DESC
+      ORDER BY time_claimed DESC
       LIMIT 1
     `;
     const [latestLog] = await executeQuery({ query: latestLogQuery, values: [employee.ashima_id] });
 
-    let nextLogType = "IN";
+    let nextLogType = "CLAIMED";
     let insertLogQuery = "";
     let insertLogValues = [];
 
-    if (!latestLog || latestLog.log_type === "OUT" || (latestLog.log_type === "IN" && latestLog.out_time)) {
+    if (!latestLog || latestLog.log_type === "OUT" || (latestLog.log_type === "CLAIMED" && latestLog.out_time)) {
       // No log, or last log is OUT, or last IN already paired: this should be a new IN
-      nextLogType = "IN";
+      nextLogType = "CLAIMED";
       insertLogQuery = `
-        INSERT INTO attendance_logs (ashima_id, log_type, in_time, out_time)
-        VALUES (?, 'IN', NOW(), NULL)
+        INSERT INTO freemeal_logs (ashima_id, log_type, time_claimed)
+        VALUES (?, 'CLAIMED', NOW())
       `;
       insertLogValues = [employee.ashima_id];
-    } else if (latestLog.log_type === "IN" && !latestLog.out_time) {
-      // Last log is IN and has no out_time: this should be OUT and update the previous IN
-      nextLogType = "OUT";
-      // Update the previous IN with out_time and log_type OUT
-      const updateQuery = `
-        UPDATE attendance_logs
-        SET log_type = 'OUT', out_time = NOW()
-        WHERE id = ?
-      `;
-      await executeQuery({ query: updateQuery, values: [latestLog.id] });
-    }
+    } 
+    
+    // else if (latestLog.log_type === "CLAIMED") {
+    //   // Last log is CLAIMED and has no out_time: this should be OUT and update the previous CLAIMED
+    //   nextLogType = "OUT";
+    //   // Update the previous CLAIMED with out_time and log_type OUT
+    //   const updateQuery = `
+    //     UPDATE freemeal_logs
+    //     SET log_type = 'OUT', out_time = NOW()
+    //     WHERE id = ?
+    //   `;
+    //   await executeQuery({ query: updateQuery, values: [latestLog.id] });
+    // }
 
-    // Only do insert if this is a new IN
+    // Only do insert if this is a new CLAIMED
     if (insertLogQuery) {
       await executeQuery({ query: insertLogQuery, values: insertLogValues });
     }
@@ -99,10 +101,10 @@ export async function POST(request) {
 
     // Return the latest attendance entry for this user
     const mergedLogsQuery = `
-      SELECT id, log_type, in_time, out_time
-      FROM attendance_logs
+      SELECT id, log_type, time_claimed
+      FROM freemeal_logs
       WHERE ashima_id = ?
-      ORDER BY in_time DESC
+      ORDER BY time_claimed DESC
       LIMIT 1
     `;
     const [attendanceLog] = await executeQuery({ query: mergedLogsQuery, values: [employee.ashima_id] });
@@ -113,9 +115,9 @@ export async function POST(request) {
       logType: nextLogType
     });
   } catch (error) {
-    console.error('Error processing attendance log:', error);
+    console.error('Error processing free meal log:', error);
     return NextResponse.json(
-      { error: 'Failed to process attendance log.' },
+      { error: 'Failed to process free meal log.' },
       { status: 500 }
     );
   }

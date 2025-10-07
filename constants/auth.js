@@ -6,7 +6,7 @@ export const AUTH_CONSTANTS = {
     GENERAL_ERROR: "An error occurred. Please try again."
   },
   LABELS: {
-    TITLE: "Security Attendance System",
+    TITLE: "Free Meal Monitoring System",
     SUBTITLE: "Sign in to your account",
     USERNAME_LABEL: "Username or Ashima ID",
     USERNAME_PLACEHOLDER: "Enter your username or Ashima ID",

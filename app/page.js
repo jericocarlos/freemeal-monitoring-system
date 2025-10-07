@@ -103,7 +103,7 @@ export default function Home() {
       <div className="fixed bottom-0 left-0 w-full bg-black/30 backdrop-blur">
         <div className="container mx-auto relative flex justify-between items-center px-8">
           {/* Title on the left */}
-          <div className="text-2xl font-bold">Security Attendance System</div>
+          <div className="text-2xl font-bold">Free Meal Monitoring System</div>
           
           {/* Spinner absolutely centered */}
           {loading && (
