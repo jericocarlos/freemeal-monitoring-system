@@ -41,39 +41,89 @@ export async function POST(request) {
       employee.photo = `data:image/png;base64,${Buffer.from(employee.photo).toString('base64')}`;
     }
 
-    // Step 1: Get latest free meal log for this user
+    // Step 1: Get latest free meal log for today
     const latestLogQuery = `
-      SELECT id, log_type, time_claimed, flag
-      FROM freemeal_logs
+      SELECT * FROM freemeal_logs
       WHERE ashima_id = ?
+      AND DATE(time_claimed) = CURDATE()
       ORDER BY time_claimed DESC
       LIMIT 1
     `;
-    const [latestLog] = await executeQuery({ query: latestLogQuery, values: [employee.ashima_id] });
+    const [latestLog] = await executeQuery({
+      query: latestLogQuery,
+      values: [employee.ashima_id],
+    });
+
+    // Step 2: Check if user already claimed yesterday
+    const yesterdayLogQuery = `
+      SELECT * FROM freemeal_logs
+      WHERE ashima_id = ?
+      AND DATE(time_claimed) = CURDATE() - INTERVAL 1 DAY
+      LIMIT 1
+    `;
+    const [yesterdayLog] = await executeQuery({
+      query: yesterdayLogQuery,
+      values: [employee.ashima_id],
+    });
+
+    // Step 3: Insert claim for yesterday if it was missed
+    if (!yesterdayLog) {
+      console.log("❌ No claim found for yesterday. Inserting one...");
+
+      const insertYesterdayQuery = `
+        INSERT INTO freemeal_logs (date_claimed, ashima_id, log_type, time_claimed)
+        VALUES (CURDATE() - INTERVAL 1 DAY, ?, 'CLAIMED', NOW())
+      `;
+      await executeQuery({
+        query: insertYesterdayQuery,
+        values: [employee.ashima_id],
+      });
+
+      console.log("✅ Missed claim for yesterday inserted.");
+    }
 
     let nextLogType = "CLAIMED";
     let insertLogQuery = "";
     let insertLogValues = [];
 
-    if (!latestLog || (latestLog.log_type === "CLAIMED" && latestLog.flag === '')) {
-      // No log, or last log is OUT, or last IN already paired: this should be a new IN
+    const today = new Date();
+    const claimedDate = new Date(latestLog?.time_claimed);
+
+    const isSameDay = latestLog &&
+      claimedDate.getDate() === today.getDate() &&
+      claimedDate.getMonth() === today.getMonth() &&
+      claimedDate.getFullYear() === today.getFullYear();
+
+    if (!latestLog || !isSameDay) {
+      // No log today → allow claim for today
       nextLogType = "CLAIMED";
       insertLogQuery = `
-        INSERT INTO freemeal_logs (ashima_id, log_type, time_claimed)
-        VALUES (?, 'CLAIMED', NOW())
+        INSERT INTO freemeal_logs (date_claimed, ashima_id, log_type, time_claimed)
+        VALUES (CURDATE(), ?, 'CLAIMED', NOW())
       `;
       insertLogValues = [employee.ashima_id];
-    } else if (latestLog.log_type === "CLAIMED" && !latestLog.flag) {
-      // Last log is CLAIMED and has no out_time: this should be OUT and update the previous CLAIMED
+
+    } else if (latestLog.log_type === "CLAIMED" && !latestLog.flag && isSameDay) {
+      // If today's CLAIMED exists but not completed → update to "CLAIMED ALREADY"
       nextLogType = "CLAIMED ALREADY";
-      // Update the previous CLAIMED with out_time and log_type OUT
       const updateQuery = `
         UPDATE freemeal_logs
         SET log_type = 'CLAIMED ALREADY', flag = 1
         WHERE id = ?
       `;
       await executeQuery({ query: updateQuery, values: [latestLog.id] });
+
+    } else if (latestLog.log_type === "CLAIMED ALREADY" && isSameDay) {
+      // Already claimed and completed today → block
+      nextLogType = "Meal already claimed today. You cannot claim again.";
     }
+
+
+
+
+
+
+
 
     // Only do insert if this is a new CLAIMED
     if (insertLogQuery) {
@@ -115,7 +165,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Error processing free meal log:', error);
     return NextResponse.json(
-      { error: 'Failed to process free meal log.' },
+      { error: 'Failed to process free meal logs.' },
       { status: 500 }
     );
   }
