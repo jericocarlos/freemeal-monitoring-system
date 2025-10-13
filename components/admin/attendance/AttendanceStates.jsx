@@ -1,7 +1,7 @@
 /**
  * AttendanceStates Component
- * 
- * Handles and displays various states for the attendance logs view including:
+ *
+ * Handles and displays various states for the free meal logs view including:
  * - Loading states with skeleton UI
  * - Error states with retry functionality
  * - Empty states with helpful messaging
@@ -15,7 +15,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 /**
- * Component to display various states (loading, error, empty) for attendance logs
+ * Component to display various states (loading, error, empty) for free meal logs
  * 
  * @param {Object} props - Component props
  * @param {boolean} props.loading - Whether data is currently loading
@@ -44,11 +44,11 @@ export default function AttendanceStates({
       <div 
         className="flex flex-col items-center justify-center py-12"
         role="status"
-        aria-label="Loading attendance logs"
+        aria-label="Loading free meal logs"
       >
         <LoadingSpinner size="lg" />
         <p className="mt-4 text-sm text-muted-foreground">
-          Loading attendance logs...
+          Loading free meal logs...
         </p>
       </div>
     );

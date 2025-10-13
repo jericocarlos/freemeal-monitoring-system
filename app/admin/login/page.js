@@ -39,7 +39,7 @@ export default function LoginPage() {
       const role = session.user.role;
       if (['superadmin', 'admin'].includes(role)) {
         router.replace('/admin/employees-management');
-      } else if (['security', 'hr'].includes(role)) {
+      } else if (['hr'].includes(role)) {
         router.replace('/admin/attendance-logs');
       } else {
         router.replace('/admin');

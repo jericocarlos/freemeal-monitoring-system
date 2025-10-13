@@ -35,12 +35,12 @@ export const MODULE_DEFINITIONS = {
     ariaLabel: 'Navigate to account management'
   },
   attendance_logs: {
-    name: 'Attendance Logs',
+    name: 'Free Meal Logs',
     href: '/admin/attendance-logs',
     icon: <CalendarCheck className="h-6 w-6" />,
     color: 'green',
-    description: 'View attendance records',
-    ariaLabel: 'Navigate to attendance logs'
+    description: 'View free meal records',
+    ariaLabel: 'Navigate to free meal logs'
   },
   role_permissions: {
     name: 'Role Permissions',

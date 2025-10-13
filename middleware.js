@@ -14,7 +14,7 @@ const routeModuleMap = {
 const defaultPermissions = {
   superadmin: ['employees_management', 'data_management', 'account_logins', 'attendance_logs', 'role_permissions'],
   admin: ['employees_management', 'data_management', 'account_logins', 'attendance_logs'],
-  security: ['attendance_logs'],
+  // security: ['attendance_logs'],
   hr: ['attendance_logs', 'employees_management'] // Make sure HR has employees_management
 };
 

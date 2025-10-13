@@ -66,7 +66,7 @@ export default function AdminDashboard() {
         accessibleModules={accessibleModules}
       />
 
-      {/* Quick Action - Attendance Logs */}
+      {/* Quick Action - Free Meal Logs */}
       <QuickAction hasAttendanceAccess={hasAttendanceAccess} />
       
       {/* Logout Confirmation Dialog */}

@@ -236,7 +236,7 @@ export default function AttendanceTable({
         </div>
         
         {totalPages > 1 && (
-          <Pagination role="navigation" aria-label="Attendance logs pagination">
+          <Pagination role="navigation" aria-label="Free meal logs pagination">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious

@@ -1,7 +1,7 @@
 /**
  * AttendanceHeader Component
- * 
- * Renders the header section of the attendance logs page with title, search, filter, and export controls.
+ *
+ * Renders the header section of the free meal logs page with title, search, filter, and export controls.
  * Includes accessibility features like ARIA labels and keyboard navigation support.
  * 
  * @component

@@ -13,9 +13,9 @@ import { useAttendanceLogsManager } from "@/hooks/useAttendanceLogsManager";
 import { Card, CardContent } from "@/components/ui/card";
 
 /**
- * Attendance Logs Page Component
- * Provides a comprehensive view of attendance logs with search, filtering, and export capabilities
- * 
+ * Free Meal Logs Page Component
+ * Provides a comprehensive view of free meal logs with search, filtering, and export capabilities
+ *
  * Features:
  * - Dashboard statistics overview
  * - Real-time search with debouncing
@@ -66,12 +66,12 @@ export default function AttendanceLogsPage() {
       <div 
         className="container mx-auto px-4 py-8"
         role="main"
-        aria-label="Attendance Logs Management"
+        aria-label="Free Meal Logs Management"
       >
         {/* Dashboard Statistics */}
         <DashboardStats />
 
-        {/* Main Attendance Logs Card */}
+        {/* Main Free Meal Logs Card */}
         <Card>
           <AttendanceHeader 
             onFilterClick={openFilterDialog}

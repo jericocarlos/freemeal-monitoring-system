@@ -19,7 +19,7 @@ export const NAV_ITEMS = {
       icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
-      name: 'Attendance Logs',
+      name: 'Free Meal Logs',
       href: '/admin/attendance-logs',
       icon: <Calendar className="h-[18px] w-[18px]" />,
     },
@@ -28,11 +28,6 @@ export const NAV_ITEMS = {
       href: '/admin/role-permissions',
       icon: <Shield className="h-[18px] w-[18px]" />,
     },
-    // {
-    //   name: 'Module Assignment',
-    //   href: '/admin/module-assignment',
-    //   icon: <UserCog className="h-[18px] w-[18px]" />,
-    // },
   ],
   admin: [
     {
@@ -51,23 +46,15 @@ export const NAV_ITEMS = {
       icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
-      name: 'Attendance Logs',
+      name: 'Free Meal Logs',
       href: '/admin/attendance-logs',
       icon: <Calendar className="h-[18px] w-[18px]" />,
     },
   ],
-  // Security only gets Attendance Logs
-  security: [
-    {
-      name: 'Attendance Logs',
-      href: '/admin/attendance-logs',
-      icon: <Calendar className="h-[18px] w-[18px]" />,
-    },
-  ],
-  // HR only gets Attendance Logs
+  // HR only gets Free Meal Logs
   hr: [
     {
-      name: 'Attendance Logs',
+      name: 'Free Meal Logs',
       href: '/admin/attendance-logs',
       icon: <Calendar className="h-[18px] w-[18px]" />,
     },
