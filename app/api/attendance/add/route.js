@@ -49,38 +49,11 @@ export async function POST(request) {
       ORDER BY time_claimed DESC
       LIMIT 1
     `;
+
     const [latestLog] = await executeQuery({
       query: latestLogQuery,
       values: [employee.ashima_id],
     });
-
-    // Step 2: Check if user already claimed yesterday
-    const yesterdayLogQuery = `
-      SELECT * FROM freemeal_logs
-      WHERE ashima_id = ?
-      AND DATE(time_claimed) = CURDATE() - INTERVAL 1 DAY
-      LIMIT 1
-    `;
-    const [yesterdayLog] = await executeQuery({
-      query: yesterdayLogQuery,
-      values: [employee.ashima_id],
-    });
-
-    // Step 3: Insert claim for yesterday if it was missed
-    if (!yesterdayLog) {
-      console.log("❌ No claim found for yesterday. Inserting one...");
-
-      const insertYesterdayQuery = `
-        INSERT INTO freemeal_logs (date_claimed, ashima_id, log_type, time_claimed)
-        VALUES (CURDATE() - INTERVAL 1 DAY, ?, 'CLAIMED', NOW())
-      `;
-      await executeQuery({
-        query: insertYesterdayQuery,
-        values: [employee.ashima_id],
-      });
-
-      console.log("✅ Missed claim for yesterday inserted.");
-    }
 
     let nextLogType = "CLAIMED";
     let insertLogQuery = "";
@@ -103,6 +76,8 @@ export async function POST(request) {
       `;
       insertLogValues = [employee.ashima_id];
 
+      console.log("✅ Free meal claimed for today.");
+
     } else if (latestLog.log_type === "CLAIMED" && !latestLog.flag && isSameDay) {
       // If today's CLAIMED exists but not completed → update to "CLAIMED ALREADY"
       nextLogType = "CLAIMED ALREADY";
@@ -113,17 +88,13 @@ export async function POST(request) {
       `;
       await executeQuery({ query: updateQuery, values: [latestLog.id] });
 
+      console.log("ℹ️ Meal already claimed earlier today. Status updated.");
+
     } else if (latestLog.log_type === "CLAIMED ALREADY" && isSameDay) {
       // Already claimed and completed today → block
       nextLogType = "Meal already claimed today. You cannot claim again.";
+      console.log("❌", nextLogType);
     }
-
-
-
-
-
-
-
 
     // Only do insert if this is a new CLAIMED
     if (insertLogQuery) {
@@ -165,7 +136,7 @@ export async function POST(request) {
   } catch (error) {
     console.error('Error processing free meal log:', error);
     return NextResponse.json(
-      { error: 'Failed to process free meal logs.' },
+      { error: error.message || 'Failed to process free meal logs.' },
       { status: 500 }
     );
   }
