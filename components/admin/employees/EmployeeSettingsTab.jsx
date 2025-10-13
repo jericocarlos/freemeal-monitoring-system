@@ -177,6 +177,46 @@ const EmployeeSettingsTab = memo(({
         </div>
       </fieldset>
 
+      {/* Signature Section */}
+      <fieldset className="space-y-4">
+        <legend className="text-base font-medium">Signature Configuration</legend>
+        
+        <div className="space-y-2">
+          <Label htmlFor="rfid_tag" className="text-sm font-medium">
+            Signature
+            {!isResigned && (
+              <span className="text-destructive ml-1" aria-label="required">*</span>
+            )}
+            {isResigned && (
+              <span className="ml-2 text-amber-600 font-normal">
+                (Removed for resigned employees)
+              </span>
+            )}
+          </Label>
+          
+         
+          
+          {errors.rfid_tag && (
+            <p 
+              id="rfid_tag-error" 
+              className="text-sm text-destructive"
+              role="alert"
+            >
+              {errors.rfid_tag.message}
+            </p>
+          )}
+          
+          {!errors.rfid_tag && (
+            <p id="rfid_tag-help" className="text-xs text-muted-foreground">
+              {isResigned 
+                ? 'Signature is automatically removed for resigned employees'
+                : 'Enter your signature. This will be used for free meal claims.'
+              }
+            </p>
+          )}
+        </div>
+      </fieldset>
+
       {/* RFID Tag Section */}
       <fieldset className="space-y-4">
         <legend className="text-base font-medium">RFID Configuration</legend>
