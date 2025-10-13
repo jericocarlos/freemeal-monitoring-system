@@ -9,8 +9,8 @@ export async function GET() {
     // Count unique employees who logged today
     const todayQuery = `
       SELECT COUNT(DISTINCT ashima_id) as count
-      FROM attendance_logs
-      WHERE DATE(in_time) = ?
+      FROM freemeal_logs
+      WHERE DATE(time_claimed) = ?
     `;
     
     const todayResult = await executeQuery({ 
@@ -21,7 +21,7 @@ export async function GET() {
     // Count total logs
     const totalLogsQuery = `
       SELECT COUNT(*) as count
-      FROM attendance_logs
+      FROM freemeal_logs
     `;
     
     const totalLogsResult = await executeQuery({ query: totalLogsQuery });
@@ -29,8 +29,7 @@ export async function GET() {
     // Count entries with time in only (no time out)
     const timeInOnlyQuery = `
       SELECT COUNT(*) as count
-      FROM attendance_logs
-      WHERE out_time IS NULL
+      FROM freemeal_logs
     `;
     
     const timeInOnlyResult = await executeQuery({ query: timeInOnlyQuery });
@@ -38,8 +37,7 @@ export async function GET() {
     // Count entries with both time in and time out
     const completeLogsQuery = `
       SELECT COUNT(*) as count
-      FROM attendance_logs
-      WHERE out_time IS NOT NULL
+      FROM freemeal_logs
     `;
     
     const completeLogsResult = await executeQuery({ query: completeLogsQuery });
@@ -51,9 +49,9 @@ export async function GET() {
       complete_logs: completeLogsResult[0].count
     });
   } catch (error) {
-    console.error("Failed to fetch attendance stats:", error);
+    console.error("Failed to fetch free meal stats:", error);
     return NextResponse.json(
-      { message: "Failed to fetch attendance stats" },
+      { message: "Failed to fetch free meal stats" },
       { status: 500 }
     );
   }

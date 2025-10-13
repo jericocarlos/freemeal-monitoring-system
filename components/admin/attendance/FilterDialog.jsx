@@ -80,7 +80,7 @@ export default function FilterDialog({
         <form onSubmit={handleSubmit(handleApplyFilters)}>
           <div className="space-y-4">
             {/* Log Type Filter */}
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="logType">Log Status</Label>
               <Controller
                 name="logType"
@@ -101,7 +101,7 @@ export default function FilterDialog({
                   </Select>
                 )}
               />
-            </div>
+            </div> */}
 
             {/* Department Filter */}
             <div className="space-y-2">

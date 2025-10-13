@@ -14,7 +14,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 /**
- * Header component for attendance logs with search, filter, and export functionality
+ * Header component for free meal logs with search, filter, and export functionality
  * 
  * @param {Object} props - Component props
  * @param {Function} props.onFilterClick - Callback when filter button is clicked
@@ -44,7 +44,7 @@ export default function AttendanceHeader({
     <CardHeader className="flex flex-row items-center justify-between">
       <div className="flex items-center gap-4">
         <CardTitle className="text-2xl font-semibold">
-          Attendance Logs
+          Free Meal Logs
         </CardTitle>
         
         {/* Active Filters Indicator */}
@@ -71,7 +71,7 @@ export default function AttendanceHeader({
       <div 
         className="flex items-center gap-4"
         role="group"
-        aria-label="Attendance logs controls"
+        aria-label="Free meal logs controls"
       >
         {/* Search Input */}
         <div className="relative">
@@ -84,7 +84,7 @@ export default function AttendanceHeader({
             placeholder="Search by name or ASHIMA ID..."
             className="pl-10 w-64"
             onChange={handleSearchInputChange}
-            aria-label="Search attendance logs by employee name or ASHIMA ID"
+            aria-label="Search free meal logs by employee name or ASHIMA ID"
           />
         </div>
 

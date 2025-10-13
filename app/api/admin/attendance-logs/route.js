@@ -1,7 +1,7 @@
 import { executeQuery } from "@/lib/db";
 import { NextResponse } from "next/server";
 
-// Fetch attendance logs with employee details
+// Fetch free meal logs with employee details
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -27,11 +27,11 @@ export async function GET(req) {
     }
 
     // Add log type filter
-    if (logType === 'IN') {
-      conditions.push("l.out_time IS NULL");
-    } else if (logType === 'OUT') {
-      conditions.push("l.out_time IS NOT NULL");
-    }
+    // if (logType === 'IN') {
+    //   conditions.push("l.out_time IS NULL");
+    // } else if (logType === 'OUT') {
+    //   conditions.push("l.out_time IS NOT NULL");
+    // }
     
     // Add department filter
     if (department) {
@@ -41,12 +41,12 @@ export async function GET(req) {
 
     // Add date range filters
     if (startDate) {
-      conditions.push("DATE(l.in_time) >= ?");
+      conditions.push("DATE(l.time_claimed) >= ?");
       values.push(startDate);
     }
 
     if (endDate) {
-      conditions.push("DATE(l.in_time) <= ?");
+      conditions.push("DATE(l.time_claimed) <= ?");
       values.push(endDate);
     }
 
@@ -61,17 +61,17 @@ export async function GET(req) {
     // Query to fetch logs with pagination
     const query = `
       SELECT
-        l.id, l.ashima_id, e.name, e.department_id,
+        l.id, l.date_claimed, l.ashima_id, e.name, e.department_id,
         d.name AS department, l.log_type,
-        l.in_time, l.out_time
+        l.time_claimed
       FROM
-        attendance_logs l
+        freemeal_logs l
       LEFT JOIN
         employees e ON e.ashima_id = l.ashima_id
       LEFT JOIN
         departments d ON e.department_id = d.id
       ${whereClause}
-      ORDER BY l.in_time DESC
+      ORDER BY l.time_claimed DESC
       LIMIT ? OFFSET ?
     `;
 
@@ -85,7 +85,7 @@ export async function GET(req) {
 
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM attendance_logs l
+      FROM freemeal_logs l
       LEFT JOIN employees e ON e.ashima_id = l.ashima_id
       LEFT JOIN departments d ON e.department_id = d.id
       ${countConditions}
@@ -102,9 +102,9 @@ export async function GET(req) {
       pages: Math.ceil(total / limit) 
     });
   } catch (err) {
-    console.error("Failed to fetch attendance logs:", err);
+    console.error("Failed to fetch free meal logs:", err);
     return NextResponse.json(
-      { message: `Failed to fetch attendance logs: ${err.message}` },
+      { message: `Failed to fetch free meal logs: ${err.message}` },
       { status: 500 }
     );
   }

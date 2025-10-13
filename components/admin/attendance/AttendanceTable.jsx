@@ -1,7 +1,7 @@
 /**
  * AttendanceTable Component
- * 
- * Displays attendance logs in a paginated table format with accessible markup.
+ *
+ * Displays free meal logs in a paginated table format with accessible markup.
  * Includes proper ARIA labels, keyboard navigation, and responsive design.
  * 
  * @component
@@ -29,10 +29,10 @@ import {
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 /**
- * Renders a table of attendance logs with pagination
+ * Renders a table of free meal logs with pagination
  * 
  * @param {Object} props - Component props
- * @param {Array} props.logs - Array of attendance log objects
+ * @param {Array} props.logs - Array of free meal log objects
  * @param {number} props.totalLogs - Total number of logs across all pages
  * @param {Object} props.pagination - Pagination state object
  * @param {Function} props.setPagination - Function to update pagination state
@@ -102,7 +102,7 @@ export default function AttendanceTable({
   };
 
   return (
-    <div role="region" aria-label="Attendance logs table">
+    <div role="region" aria-label="Free meal logs table">
       {/* Table Container */}
       <div className="rounded-md border overflow-x-auto">
         <Table>
@@ -132,23 +132,16 @@ export default function AttendanceTable({
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
-                aria-label="Attendance date"
+                aria-label="Free meal date"
               >
                 Date
               </TableHead>
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
-                aria-label="Time in timestamp"
+                aria-label="Time claimed timestamp"
               >
-                Time In
-              </TableHead>
-              <TableHead 
-                scope="col"
-                className="whitespace-nowrap"
-                aria-label="Time out timestamp"
-              >
-                Time Out
+                Time Claimed
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -163,7 +156,7 @@ export default function AttendanceTable({
                   <div className="flex flex-col items-center gap-3">
                     <LoadingSpinner size="md" />
                     <span className="text-sm text-muted-foreground">
-                      Loading attendance logs...
+                      Loading free meal logs...
                     </span>
                   </div>
                 </TableCell>
@@ -184,24 +177,24 @@ export default function AttendanceTable({
                     {log.department || "N/A"}
                   </TableCell>
                   <TableCell>
-                    {formatDate(log.in_time)}
+                    {formatDate(log.date_claimed)}
                   </TableCell>
                   <TableCell className="text-green-600 font-medium">
                     <time 
                       dateTime={log.in_time}
-                      title={`Time in: ${formatDateTime(log.in_time)}`}
+                      title={`Time Claimed: ${formatDateTime(log.time_claimed)}`}
                     >
-                      {formatDateTime(log.in_time)}
+                      {formatDateTime(log.time_claimed)}
                     </time>
                   </TableCell>
-                  <TableCell className="text-red-600 font-medium">
+                  {/* <TableCell className="text-red-600 font-medium">
                     <time 
                       dateTime={log.out_time}
                       title={`Time out: ${formatDateTime(log.out_time)}`}
                     >
                       {formatDateTime(log.out_time)}
                     </time>
-                  </TableCell>
+                  </TableCell> */}
                 </TableRow>
               ))
             ) : (
@@ -212,7 +205,7 @@ export default function AttendanceTable({
                   aria-live="polite"
                 >
                   <div className="text-muted-foreground">
-                    No attendance logs found.
+                    No free meal logs found.
                   </div>
                 </TableCell>
               </TableRow>

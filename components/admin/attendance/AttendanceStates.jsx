@@ -69,18 +69,18 @@ export default function AttendanceStates({
             </div>
             
             <h3 className="text-lg font-semibold mb-2">
-              Failed to Load Attendance Logs
+              Failed to Load Free Meal Logs
             </h3>
             
             <p className="text-sm text-muted-foreground mb-4 max-w-md">
-              {error || "An unexpected error occurred while loading the attendance logs."}
+              {error || "An unexpected error occurred while loading the free meal logs."}
             </p>
             
             <Button 
               onClick={onRefresh}
               variant="outline"
               className="flex items-center gap-2"
-              aria-label="Retry loading attendance logs"
+              aria-label="Retry loading free meal logs"
             >
               <RefreshCw className="h-4 w-4" aria-hidden="true" />
               Try Again
@@ -97,20 +97,20 @@ export default function AttendanceStates({
       <div 
         className="flex flex-col items-center justify-center py-12 text-center"
         role="status"
-        aria-label="No attendance logs found"
+        aria-label="No free meal logs found"
       >
         <div className="rounded-full bg-muted/50 p-6 mb-6">
           <Database className="h-8 w-8 text-muted-foreground" aria-hidden="true" />
         </div>
         
         <h3 className="text-xl font-semibold mb-2">
-          {hasFiltersOrSearch ? "No Matching Records" : "No Attendance Logs"}
+          {hasFiltersOrSearch ? "No Matching Records" : "No Free Meal Logs"}
         </h3>
         
         <p className="text-muted-foreground mb-6 max-w-md">
           {hasFiltersOrSearch
-            ? "No attendance logs match your current search criteria or filters. Try adjusting your search terms or removing some filters."
-            : "There are no attendance logs to display. Logs will appear here once employees start recording their attendance."
+            ? "No free meal logs match your current search criteria or filters. Try adjusting your search terms or removing some filters."
+            : "There are no free meal logs to display. Logs will appear here once employees start recording their free meal claims."
           }
         </p>
 
@@ -132,7 +132,7 @@ export default function AttendanceStates({
             onClick={onRefresh}
             variant="default"
             className="flex items-center gap-2"
-            aria-label="Refresh attendance logs"
+            aria-label="Refresh free meal logs"
           >
             <RefreshCw className="h-4 w-4" aria-hidden="true" />
             Refresh
