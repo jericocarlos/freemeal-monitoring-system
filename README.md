@@ -1,20 +1,20 @@
 # FREE MEAL MONITORING SYSTEM
 
-A modern, comprehensive attendance management system built with Next.js that uses RFID technology for seamless employee check-in/check-out tracking. The system features a beautiful, responsive interface with real-time attendance monitoring, administrative controls, and comprehensive reporting capabilities.
+A modern, comprehensive free meal monitoring system built with Next.js that uses RFID technology for seamless employee claiming free meal tracking. The system features a beautiful, responsive interface with real-time free meal monitoring, administrative controls, and comprehensive reporting capabilities.
 
 ## 🚀 Features
 
 ### 🏠 Employee Interface
-- **RFID Tag Reading**: Instant attendance logging via RFID card scanning
+- **RFID Tag Reading**: Instant free meal logging via RFID card scanning
 - **Real-time Clock**: Live time display with smooth animations
-- **Employee Information Display**: Shows employee details, photo, and attendance status
+- **Employee Information Display**: Shows employee details, photo, and free meal status
 - **Visual Feedback**: Smooth animations and audio feedback for successful/failed scans
-- **Status Indicators**: Clear visual indicators for check-in/check-out status
+- **Status Indicators**: Clear visual indicators for claimed/claimed already status
 
 ### 👨‍💼 Admin Dashboard
-- **Comprehensive Dashboard**: Overview statistics including total employees, attendance logs, and department metrics
+- **Comprehensive Dashboard**: Overview statistics including total employees, free meal logs, and department metrics
 - **Employee Management**: Full CRUD operations for employee records
-- **Attendance Logs**: Detailed attendance tracking with filtering and export capabilities
+- **Free Meal Logs**: Detailed free meal tracking with filtering and export capabilities
 - **Department Management**: Organize employees by departments and positions
 - **Account Management**: Admin user account creation and role management
 - **Data Export**: Export attendance data to CSV format
@@ -22,7 +22,7 @@ A modern, comprehensive attendance management system built with Next.js that use
 
 ### 🔐 Security & Authentication
 - **NextAuth.js Integration**: Secure authentication system
-- **Role-based Access Control**: Different access levels (superadmin, admin, security, hr)
+- **Role-based Access Control**: Different access levels (superadmin, admin, hr)
 - **Protected Routes**: Secure admin areas with proper authorization
 - **Session Management**: Persistent login sessions with proper security
 
@@ -68,8 +68,8 @@ A modern, comprehensive attendance management system built with Next.js that use
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/rfid-attendance-system.git
-   cd rfid-attendance-system
+   git clone https://github.com/your-username/freemeal-monitoring-system.git
+   cd freemeal-monitoring-system
    ```
 
 2. **Install dependencies**
@@ -84,7 +84,7 @@ A modern, comprehensive attendance management system built with Next.js that use
    DB_HOST=localhost
    DB_USER=your_db_username
    DB_PASSWORD=your_db_password
-   DB_NAME=rfid_attendance
+   DB_NAME=db_freemeal
 
    # NextAuth Configuration
    NEXTAUTH_SECRET=your_nextauth_secret
@@ -97,13 +97,13 @@ A modern, comprehensive attendance management system built with Next.js that use
 4. **Database Setup**
    ```bash
    # Create the database
-   mysql -u root -p -e "CREATE DATABASE rfid_attendance;"
+   mysql -u root -p -e "CREATE DATABASE db_freemeal;"
    
    # Import the database schema
-   mysql -u root -p rfid_attendance < databases/rfid_attendance.sql
+   mysql -u root -p db_freemeal < databases/db_freemeal.sql
    
    # Run additional setup if needed
-   mysql -u root -p rfid_attendance < databases/db_setup.sql
+   mysql -u root -p db_freemeal < databases/db_setup.sql
    ```
 
 5. **Create Admin User**
@@ -124,24 +124,24 @@ A modern, comprehensive attendance management system built with Next.js that use
 
 ### For Employees
 1. Simply tap your RFID card on the reader
-2. The system will automatically detect your card and log your attendance
+2. The system will automatically detect your card and log your free meal claimed
 3. Visual and audio feedback will confirm the action
-4. Check-in/check-out status is automatically determined based on your last log
+4. Claimed/Claimed Already status is automatically determined based on your last log
 
 ### For Administrators
 1. Login to the admin dashboard at `/admin/login`
 2. Use the dashboard to:
-   - View real-time attendance statistics
+   - View real-time free meal statistics
    - Manage employee records
-   - Monitor attendance logs
-   - Export attendance data
+   - Monitor free meal logs
+   - Export free meal data
    - Manage departments and positions
    - Create additional admin accounts
 
 ## 🏗️ Project Structure
 
 ```
-rfid-attendance-system/
+freemeal-monitoring-system/
 ├── app/                          # Next.js App Router
 │   ├── admin/                    # Admin dashboard pages
 │   │   ├── (root)/              # Protected admin routes
