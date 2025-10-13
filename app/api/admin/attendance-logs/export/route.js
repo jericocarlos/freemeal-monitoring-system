@@ -22,20 +22,20 @@ export async function GET(req) {
     }
 
     // Add log type filter
-    if (logType === 'IN') {
-      conditions.push("l.out_time IS NULL");
-    } else if (logType === 'OUT') {
-      conditions.push("l.out_time IS NOT NULL");
-    }
+    // if (logType === 'IN') {
+    //   conditions.push("l.out_time IS NULL");
+    // } else if (logType === 'OUT') {
+    //   conditions.push("l.out_time IS NOT NULL");
+    // }
 
     // Add date range filters
     if (startDate) {
-      conditions.push("DATE(l.in_time) >= ?");
+      conditions.push("DATE(l.time_claimed) >= ?");
       values.push(startDate);
     }
 
     if (endDate) {
-      conditions.push("DATE(l.in_time) <= ?");
+      conditions.push("DATE(l.time_claimed) <= ?");
       values.push(endDate);
     }
 
@@ -47,23 +47,23 @@ export async function GET(req) {
     // Query to fetch logs for export
     const query = `
       SELECT
-        l.ashima_id, e.name, d.name AS department, 
-        DATE(l.in_time) AS log_date,
-        l.in_time, l.out_time
+        l.ashima_id, e.name, p.name AS position, 
+        DATE(l.date_claimed) AS log_date,
+        l.time_claimed
       FROM
-        attendance_logs l
+        freemeal_logs l
       LEFT JOIN
         employees e ON e.ashima_id = l.ashima_id
       LEFT JOIN
-        departments d ON e.department_id = d.id
+        positions p ON e.position_id = p.id
       ${whereClause}
-      ORDER BY l.in_time DESC
+      ORDER BY l.date_claimed DESC
     `;
 
     const logs = await executeQuery({ query, values });
 
     // Generate CSV content
-    const headers = ["Ashima ID", "Name", "Department", "Date", "Time In", "Time Out"];
+    const headers = ["Ashima ID", "Employee Name", "Position", "Date", "Time Claimed"];
     
     let csvContent = headers.join(",") + "\n";
     
@@ -81,10 +81,9 @@ export async function GET(req) {
       const row = [
         log.ashima_id || "",
         (log.name || "").replace(/,/g, " "), // Replace commas in names
-        (log.department || "").replace(/,/g, " "), // Replace commas in department names
+        (log.position || "").replace(/,/g, " "), // Replace commas in position names
         formatDate(log.log_date),
-        formatTime(log.in_time),
-        formatTime(log.out_time)
+        formatTime(log.time_claimed)
       ];
       
       csvContent += row.join(",") + "\n";
@@ -94,13 +93,13 @@ export async function GET(req) {
     return new Response(csvContent, {
       headers: {
         "Content-Type": "text/csv",
-        "Content-Disposition": `attachment; filename="attendance_logs_${new Date().toISOString().split('T')[0]}.csv"`
+        "Content-Disposition": `attachment; filename="freemeal_logs_${new Date().toISOString().split('T')[0]}.csv"`
       }
     });
   } catch (error) {
-    console.error("Failed to export attendance logs:", error);
+    console.error("Failed to export free meal logs:", error);
     return NextResponse.json(
-      { message: "Failed to export attendance logs" },
+      { message: "Failed to export free meal logs" },
       { status: 500 }
     );
   }

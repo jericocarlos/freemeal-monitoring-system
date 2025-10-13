@@ -125,9 +125,9 @@ export default function AttendanceTable({
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
-                aria-label="Department name"
+                aria-label="Position name"
               >
-                Department
+                Position
               </TableHead>
               <TableHead 
                 scope="col"
@@ -174,7 +174,7 @@ export default function AttendanceTable({
                     {log.name || "N/A"}
                   </TableCell>
                   <TableCell>
-                    {log.department || "N/A"}
+                    {log.position || "N/A"}
                   </TableCell>
                   <TableCell>
                     {formatDate(log.date_claimed)}

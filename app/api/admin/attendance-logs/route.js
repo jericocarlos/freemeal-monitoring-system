@@ -33,7 +33,7 @@ export async function GET(req) {
     //   conditions.push("l.out_time IS NOT NULL");
     // }
     
-    // Add department filter
+    // Add position filter
     if (department) {
       conditions.push("e.department_id = ?");
       values.push(department);
@@ -61,15 +61,15 @@ export async function GET(req) {
     // Query to fetch logs with pagination
     const query = `
       SELECT
-        l.id, l.date_claimed, l.ashima_id, e.name, e.department_id,
-        d.name AS department, l.log_type,
+        l.id, l.date_claimed, l.ashima_id, e.name, e.position_id,
+        p.name AS position, l.log_type,
         l.time_claimed
       FROM
         freemeal_logs l
       LEFT JOIN
         employees e ON e.ashima_id = l.ashima_id
       LEFT JOIN
-        departments d ON e.department_id = d.id
+        positions p ON e.position_id = p.id
       ${whereClause}
       ORDER BY l.time_claimed DESC
       LIMIT ? OFFSET ?

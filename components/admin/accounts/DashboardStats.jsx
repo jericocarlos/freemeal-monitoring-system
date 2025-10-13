@@ -68,7 +68,7 @@ export default function DashboardStats() {
       </Card>
       
       {/* Security Accounts */}
-      <Card>
+      {/* <Card>
         <CardContent className="p-6 flex items-center justify-between">
           <div>
             <p className="text-sm font-medium text-muted-foreground">Security Accounts</p>
@@ -78,7 +78,7 @@ export default function DashboardStats() {
           </div>
           <FiUserCheck className="h-10 w-10 text-green-500 opacity-80" />
         </CardContent>
-      </Card>
+      </Card> */}
       
       {/* HR Accounts or Recent Accounts */}
       <Card>

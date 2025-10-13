@@ -147,7 +147,7 @@ export const useAttendanceLogsManager = () => {
   }, [debouncedSearchUpdate]);
 
   /**
-   * Exports attendance logs as CSV
+   * Exports Free Meal logs as CSV
    */
   const handleExportLogs = useCallback(async () => {
     try {
@@ -182,14 +182,14 @@ export const useAttendanceLogsManager = () => {
       
       // Add timestamp to filename for better organization
       const date = new Date().toISOString().split('T')[0];
-      link.download = `attendance_logs_${date}.csv`;
+      link.download = `freemeal_logs_${date}.csv`;
       
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
       
-      enqueueSnackbar('Attendance logs exported successfully', { 
+      enqueueSnackbar('Free Meal logs exported successfully', { 
         variant: 'success' 
       });
     } catch (error) {
