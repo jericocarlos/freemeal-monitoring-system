@@ -6,7 +6,7 @@ function decodeBase64ToBinary(base64String) {
   return Buffer.from(base64String.replace(/^data:image\/\w+;base64,/, ""), "base64");
 }
 
-// GET: Fetch Employees with Search, Filters, and Pagination
+// GET: Fetch Trainees with Search, Filters, and Pagination
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -96,82 +96,74 @@ export async function GET(req) {
   }
 }
 
-// POST: Add a New Employee
+// POST: Add a New Trainee
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { ashima_id, name, department_id, position_id, rfid_tag, photo, emp_stat } = body;
+    const { name, rfid_tag, photo, trainee_stat, status, department_id, position_id } = body;
 
     // Decode Base64 photo to binary
     const binaryPhoto = photo ? decodeBase64ToBinary(photo) : null;
 
     const insertQuery = `
-      INSERT INTO employees (ashima_id, name, department_id, position_id, rfid_tag, photo, emp_stat, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO trainees (name, rfid_tag, photo, trainee_stat, status, department_id, position_id)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await executeQuery({
       query: insertQuery,
       values: [
-        ashima_id,
         name,
-        department_id ? parseInt(department_id, 10) : null,
-        position_id ? parseInt(position_id, 10) : null,
         rfid_tag || null,
         binaryPhoto,
-        emp_stat || "regular",
-        "active"
+        trainee_stat || null,
+        status || null,
+        department_id ? parseInt(department_id, 10) : null,
+        position_id ? parseInt(position_id, 10) : null,
       ]
     });
 
     // Get the newly inserted ID
     const insertedId = result.insertId;
 
-    // Fetch the complete employee record with the new ID
-    const newEmployee = await executeQuery({
-      query: "SELECT * FROM employees WHERE id = ?",
+    // Fetch the complete trainee record with the new ID
+    const newTrainee = await executeQuery({
+      query: "SELECT * FROM trainees WHERE id = ?",
       values: [insertedId]
     });
 
     return NextResponse.json({
-      message: "Employee added successfully",
-      employee: newEmployee[0],
+      message: "Trainee added successfully",
+      trainee: newTrainee[0],
       id: insertedId
     });
   } catch (err) {
-    console.error("Failed to add employee:", err);
+    console.error("Failed to add trainee:", err);
     return NextResponse.json(
-      { message: `Failed to add employee: ${err.message}` },
+      { message: `Failed to add trainee: ${err.message}` },
       { status: 500 }
     );
   }
 }
 
-// DELETE: Delete an Employee
+// DELETE: Delete a Trainee
 export async function DELETE(req) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-
-    if (!id) {
-      return NextResponse.json(
-        { message: "Employee ID is required" },
-        { status: 400 }
-      );
-    }
-
+    
     const query = `
-      DELETE FROM employees 
+      DELETE FROM trainees 
       WHERE id = ?
     `;
 
     await executeQuery({ query, values: [id] });
 
-    return NextResponse.json({ message: "Employee deleted successfully" });
+    return NextResponse.json({ message: "Trainee deleted successfully" });
   } catch (err) {
-    console.error("Failed to delete employee:", err);
+    console.error("Failed to delete trainee:", err);
     return NextResponse.json(
-      { message: "Failed to delete employee" },
+      { message: "Failed to delete trainee" },
       { status: 500 }
     );
   }

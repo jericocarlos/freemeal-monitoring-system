@@ -1,6 +1,6 @@
 /**
- * Employee Details Tab Component
- * Handles the basic employee information form fields
+ * Trainee Details Tab Component
+ * Handles the basic trainee information form fields
  */
 
 import React, { memo } from 'react';
@@ -17,53 +17,49 @@ import {
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 
 /**
- * EmployeeDetailsTab Component
+ * TraineeDetailsTab Component
  * @param {Object} props - Component props
  * @param {Object} props.control - React Hook Form control
  * @param {Function} props.register - React Hook Form register function
  * @param {Object} props.errors - Form validation errors
  * @param {Array} props.departments - Available departments
  * @param {Array} props.positions - Available positions
- * @param {Array} props.leaders - Available leaders
  * @param {boolean} props.isEditing - Whether in edit mode
- * @param {boolean} props.loadingLeaders - Loading state for leaders
  * @param {boolean} props.loadingOptions - Loading state for form options
  */
-const EmployeeDetailsTab = memo(({
+const TraineeDetailsTab = memo(({
   control,
   register,
   errors,
   departments = [],
   positions = [],
-  leaders = [],
   isEditing = false,
-  loadingLeaders = false,
   loadingOptions = false
 }) => {
   return (
     <div className="space-y-6" role="tabpanel" aria-labelledby="details-tab">
       {/* Basic Information Section */}
       <fieldset className="space-y-4">
-        <legend className="sr-only">Basic Employee Information</legend>
+        <legend className="sr-only">Basic Trainee Information</legend>
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Employee ID */}
-          <div className="space-y-2">
+          {/* Trainee ID */}
+          {/* <div className="space-y-2">
             <Label htmlFor="ashima_id" className="text-sm font-medium">
-              Employee ID <span className="text-destructive" aria-label="required">*</span>
+              Trainee ID <span className="text-destructive" aria-label="required">*</span>
             </Label>
             <Input
               id="ashima_id"
               type="text"
-              autoComplete="employee-id"
+              autoComplete="trainee-id"
               disabled={isEditing}
               aria-describedby={errors.ashima_id ? 'ashima_id-error' : undefined}
               aria-invalid={!!errors.ashima_id}
               {...register('ashima_id', { 
-                required: 'Employee ID is required',
+                required: 'Trainee ID is required',
                 pattern: {
                   value: /^[A-Za-z0-9-_]+$/,
-                  message: 'Employee ID can only contain letters, numbers, hyphens, and underscores'
+                  message: 'Trainee ID can only contain letters, numbers, hyphens, and underscores'
                 }
               })}
             />
@@ -78,10 +74,10 @@ const EmployeeDetailsTab = memo(({
             )}
             {isEditing && (
               <p className="text-xs text-muted-foreground">
-                Employee ID cannot be changed after creation
+                Trainee ID cannot be changed after creation
               </p>
             )}
-          </div>
+          </div> */}
 
           {/* Full Name */}
           <div className="space-y-2">
@@ -222,37 +218,8 @@ const EmployeeDetailsTab = memo(({
       {/* Status Section */}
       <fieldset className="space-y-4">
         <legend className="sr-only">Status Information</legend>
-        {/* Employment Status and Active Status */}
+        {/* Active Status */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {/* Employment Status */}
-          <div className="space-y-2">
-            <Label htmlFor="emp_stat" className="text-sm font-medium">
-              Employment Type
-            </Label>
-            <Controller
-              name="emp_stat"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  onValueChange={field.onChange}
-                  value={field.value || 'regular'}
-                >
-                  <SelectTrigger 
-                    id="emp_stat"
-                    aria-label="Select employment type"
-                  >
-                    <SelectValue placeholder="Select employment type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="regular">Regular</SelectItem>
-                    <SelectItem value="contractual">Contractual</SelectItem>
-                    <SelectItem value="probationary">Probationary</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-          </div>
-
           {/* Status */}
           <div className="space-y-2">
             <Label htmlFor="status" className="text-sm font-medium">
@@ -269,14 +236,14 @@ const EmployeeDetailsTab = memo(({
                 >
                   <SelectTrigger 
                     id="status"
-                    aria-label="Select employee status"
+                    aria-label="Select trainee status"
                   >
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="resigned">Resigned</SelectItem>
+                    <SelectItem value="discontinued">Discontinued</SelectItem>
                   </SelectContent>
                 </Select>
               )}
@@ -293,6 +260,6 @@ const EmployeeDetailsTab = memo(({
   );
 });
 
-EmployeeDetailsTab.displayName = 'EmployeeDetailsTab';
+TraineeDetailsTab.displayName = 'TraineeDetailsTab';
 
-export default EmployeeDetailsTab;
+export default TraineeDetailsTab;

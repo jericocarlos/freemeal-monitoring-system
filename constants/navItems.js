@@ -9,6 +9,11 @@ export const NAV_ITEMS = {
       icon: <Users className="h-[18px] w-[18px]" />,
     },
     {
+      name: 'Trainees Management',
+      href: '/admin/trainees-management',
+      icon: <Users className="h-[18px] w-[18px]" />,
+    },
+    {
       name: 'Data Management',
       href: '/admin/lists',
       icon: <Database className="h-[18px] w-[18px]" />,
@@ -29,10 +34,16 @@ export const NAV_ITEMS = {
       icon: <Shield className="h-[18px] w-[18px]" />,
     },
   ],
+  // Admin can access everything except Role Permissions
   admin: [
     {
       name: 'Employees Management',
       href: '/admin/employees-management',
+      icon: <Users className="h-[18px] w-[18px]" />,
+    },
+    {
+      name: 'Trainees Management',
+      href: '/admin/trainees-management',
       icon: <Users className="h-[18px] w-[18px]" />,
     },
     {
@@ -51,12 +62,25 @@ export const NAV_ITEMS = {
       icon: <Calendar className="h-[18px] w-[18px]" />,
     },
   ],
-  // HR only gets Free Meal Logs
+  // HR only gets Free Meal Logs and Employees Management
   hr: [
+    {
+      name: 'Employees Management',
+      href: '/admin/employees-management',
+      icon: <Users className="h-[18px] w-[18px]" />,
+    },
     {
       name: 'Free Meal Logs',
       href: '/admin/attendance-logs',
       icon: <Calendar className="h-[18px] w-[18px]" />,
+    },
+  ],
+  // Recruitment only gets Trainees Management
+  recruitment: [
+    {
+      name: 'Trainees Management',
+      href: '/admin/trainees-management',
+      icon: <Users className="h-[18px] w-[18px]" />,
     },
   ],
 };

@@ -16,10 +16,10 @@ export const ROLES = [
     description: 'Administrative access with most privileges'
   },
   { 
-    value: 'security', 
-    label: 'Security', 
+    value: 'recruitment', 
+    label: 'Recruitment', 
     color: 'bg-green-500',
-    description: 'Security-focused access for monitoring'
+    description: 'Recruitment-focused access for monitoring'
   },
   { 
     value: 'hr', 
@@ -36,6 +36,13 @@ export const MODULES = [
     description: 'Manage employee records, profiles, and information',
     category: 'Core'
   },
+  { 
+    value: 'trainees_management', 
+    label: 'Trainees Management', 
+    description: 'Manage trainee records, profiles, and information',
+    category: 'Core'
+  },
+  
   { 
     value: 'data_management', 
     label: 'Data Management', 
@@ -73,6 +80,7 @@ export const PERMISSIONS = [
 // Module icons mapping
 export const MODULE_ICONS = {
   employees_management: 'Users',
+  trainees_management: 'Users',
   data_management: 'Database', 
   account_logins: 'UserCog',
   attendance_logs: 'Calendar',

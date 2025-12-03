@@ -18,6 +18,14 @@ export const MODULE_DEFINITIONS = {
     description: 'Manage employee records',
     ariaLabel: 'Navigate to employee management'
   },
+  trainees_management: {
+    name: 'Trainees',
+    href: '/admin/trainees-management',
+    icon: <Users className="h-6 w-6" />,
+    color: 'blue',
+    description: 'Manage trainee records',
+    ariaLabel: 'Navigate to trainee management'
+  },
   data_management: {
     name: 'Lists',
     href: '/admin/lists',

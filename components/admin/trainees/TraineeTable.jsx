@@ -33,9 +33,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
-export default function EmployeeTable({ 
-  employees, 
-  totalEmployees, 
+export default function TraineeTable({ 
+  trainees, 
+  totalTrainees, 
   pagination, 
   setPagination,
   onEdit,
@@ -128,14 +128,14 @@ export default function EmployeeTable({
 
   // Initialize TanStack table
   const table = useReactTable({
-    data: employees,
+    data: trainees,
     columns,
     state: {
       sorting,
       pagination,
     },
     manualPagination: true,
-    pageCount: Math.ceil(totalEmployees / pagination.pageSize),
+    pageCount: Math.ceil(totalTrainees / pagination.pageSize),
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -271,7 +271,7 @@ export default function EmployeeTable({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No employees found.
+                  No trainees found.
                 </TableCell>
               </TableRow>
             )}
@@ -284,9 +284,9 @@ export default function EmployeeTable({
           Showing {pagination.pageIndex * pagination.pageSize + 1} to{" "}
           {Math.min(
             (pagination.pageIndex + 1) * pagination.pageSize,
-            totalEmployees
+            totalTrainees
           )}{" "}
-          of {totalEmployees} employees
+          of {totalTrainees} trainees
         </div>
         <Pagination>
           <PaginationContent>

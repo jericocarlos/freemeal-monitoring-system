@@ -26,6 +26,11 @@ const MODULE_DEFINITIONS = {
     href: '/admin/employees-management',
     icon: <Users className="h-[18px] w-[18px]" />,
   },
+  trainees_management: {
+    name: 'Trainees Management',
+    href: '/admin/trainees-management',
+    icon: <Users className="h-[18px] w-[18px]" />,
+  },
   data_management: {
     name: 'Data Management',
     href: '/admin/lists',

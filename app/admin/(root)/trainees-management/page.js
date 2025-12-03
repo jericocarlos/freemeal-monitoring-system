@@ -1,14 +1,14 @@
 /**
- * Employee Management Page
+ * Trainees Management Page
  * 
- * Main page for managing employees with comprehensive CRUD operations,
+ * Main page for managing trainees with comprehensive CRUD operations,
  * filtering, searching, and data export/import capabilities.
  * 
  * Features:
- * - Employee listing with pagination
+ * - Trainee listing with pagination
  * - Advanced search and filtering
- * - Employee creation and editing
- * - Employee deletion with confirmation
+ * - Trainee creation and editing
+ * - Trainee deletion with confirmation
  * - Dashboard statistics
  * - Data export/import (future feature)
  * - Responsive design and accessibility
@@ -19,31 +19,30 @@
 import React, { useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  EmployeeTable, 
-  EmployeeFormDialog, 
+  TraineeTable, 
+  TraineeFormDialog, 
   FilterDialog, 
   DashboardStats,
   SearchAndFilterControls,
-  EmployeeActions,
+  TraineeActions,
   LoadingState,
   EmptyState,
   ErrorState
-} from "@/components/admin/employees";
-import { useEmployeesManager } from "@/hooks/useEmployeesManager";
+} from "@/components/admin/trainees";
+import { useTraineesManager } from "@/hooks/useTraineesManager";
 import PermissionGuard from "@/components/auth/PermissionGuard";
 
 /**
- * EmployeesManagementPage Component
- * Main component for employee management functionality
+ * TraineesManagementPage Component
+ * Main component for trainee management functionality
  */
-export default function EmployeesManagementPage() {
+export default function TraineesManagementPage() {
   const {
     // Data state
-    employees,
-    totalEmployees,
+    trainees,
+    totalTrainees,
     departments,
     positions,
-    leaders,
     
     // Loading states
     loading,
@@ -63,17 +62,17 @@ export default function EmployeesManagementPage() {
     setIsFormDialogOpen,
     isFilterDialogOpen,
     setIsFilterDialogOpen,
-    currentEmployee,
+    currentTrainee,
     
     // Error state
     error,
     
     // Actions
-    handleEmployeeSubmit,
-    openEmployeeForm,
+    handleTraineeSubmit,
+    openTraineeForm,
     resetFilters,
-    refreshEmployees,
-  } = useEmployeesManager();
+    refreshTrainees,
+  } = useTraineesManager();
 
   /**
    * Memoized computed values for better performance
@@ -82,7 +81,7 @@ export default function EmployeesManagementPage() {
     const hasActiveFilters = Object.values(filters).some(Boolean);
     const hasSearchQuery = searchQuery.trim().length > 0;
     const hasFiltersOrSearch = hasActiveFilters || hasSearchQuery;
-    const showEmptyState = !loading && employees.length === 0;
+    const showEmptyState = !loading && trainees.length === 0;
     
     return {
       hasActiveFilters,
@@ -90,19 +89,19 @@ export default function EmployeesManagementPage() {
       hasFiltersOrSearch,
       showEmptyState,
     };
-  }, [filters, searchQuery, loading, employees.length]);
+  }, [filters, searchQuery, loading, trainees.length]);
 
   /**
    * Placeholder handlers for future features
    */
-  const handleExportEmployees = () => {
-    // TODO: Implement employee data export
-    console.log('Export employees functionality to be implemented');
+  const handleExportTrainees = () => {
+    // TODO: Implement trainee data export
+    console.log('Export trainees functionality to be implemented');
   };
 
-  const handleImportEmployees = () => {
-    // TODO: Implement employee data import
-    console.log('Import employees functionality to be implemented');
+  const handleImportTrainees = () => {
+    // TODO: Implement trainee data import
+    console.log('Import trainees functionality to be implemented');
   };
 
   /**
@@ -121,14 +120,14 @@ export default function EmployeesManagementPage() {
       return (
         <ErrorState 
           error={error} 
-          onRetry={refreshEmployees} 
+          onRetry={refreshTrainees} 
         />
       );
     }
 
     // Loading state
     if (loading) {
-      return <LoadingState message="Loading employees..." />;
+      return <LoadingState message="Loading trainees..." />;
     }
 
     // Empty state
@@ -136,51 +135,51 @@ export default function EmployeesManagementPage() {
       return (
         <EmptyState
           hasFilters={computedValues.hasFiltersOrSearch}
-          onAddEmployee={() => openEmployeeForm()}
+          onAddTrainee={() => openTraineeForm()}
           onResetFilters={resetFilters}
         />
       );
     }
 
-    // Employee table
+    // Trainee table
     return (
-      <EmployeeTable 
-        employees={employees}
-        totalEmployees={totalEmployees}
+      <TraineeTable 
+        trainees={trainees}
+        totalTrainees={totalTrainees}
         pagination={pagination}
         setPagination={setPagination}
-        onEdit={openEmployeeForm}
+        onEdit={openTraineeForm}
         loading={loading}
       />
     );
   };
 
   return (
-    <PermissionGuard module="employees_management">
+    <PermissionGuard module="trainees_management">
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Dashboard Statistics */}
         {/* <DashboardStats /> */}
 
-        {/* Main Employee Management Card */}
+        {/* Main Trainee Management Card */}
         <Card>
           <CardHeader className="pb-4">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div>
                 <CardTitle className="text-2xl font-bold">
-                  Qualified Employee Free Meal Lists
+                  Trainee Free Meal Lists
                 </CardTitle>
                 <p className="text-muted-foreground mt-1">
-                  Manage qualified free meal employee lists.
+                  Manage trainee free meal lists.
                 </p>
               </div>
               
               {/* Header Actions */}
-              <EmployeeActions
-                onAddEmployee={() => openEmployeeForm()}
-                onExportEmployees={handleExportEmployees}
-                onImportEmployees={handleImportEmployees}
+              <TraineeActions
+                onAddTrainee={() => openTraineeForm()}
+                onExportTrainees={handleExportTrainees}
+                onImportTrainees={handleImportTrainees}
                 loading={loading}
-                totalEmployees={totalEmployees}
+                totalTrainees={totalTrainees}
               />
             </div>
           </CardHeader>
@@ -193,7 +192,7 @@ export default function EmployeesManagementPage() {
               filters={filters}
               onOpenFilter={handleOpenFilter}
               onResetFilters={resetFilters}
-              onRefresh={refreshEmployees}
+              onRefresh={refreshTrainees}
               loading={loading}
             />
 
@@ -202,15 +201,14 @@ export default function EmployeesManagementPage() {
           </CardContent>
         </Card>
 
-        {/* Employee Form Dialog */}
-        <EmployeeFormDialog
+        {/* Trainee Form Dialog */}
+        <TraineeFormDialog
           open={isFormDialogOpen}
           onOpenChange={setIsFormDialogOpen}
-          employee={currentEmployee}
+          trainee={currentTrainee}
           departments={departments}
           positions={positions}
-          leaders={leaders}
-          onSubmit={handleEmployeeSubmit}
+          onSubmit={handleTraineeSubmit}
           isLoadingOptions={loadingMetadata}
           isSubmitting={submitting}
         />
@@ -221,7 +219,6 @@ export default function EmployeesManagementPage() {
           onOpenChange={setIsFilterDialogOpen}
           departments={departments}
           positions={positions}
-          leaders={leaders}
           filters={filters}
           setFilters={setFilters}
           loading={loadingMetadata}
