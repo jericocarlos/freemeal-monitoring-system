@@ -17,8 +17,6 @@ export const useTraineeForm = (employee, open, onSubmit) => {
   // Form state
   const [imagePreview, setImagePreview] = useState(null);
   const [activeTab, setActiveTab] = useState('details');
-  const [leaders, setLeaders] = useState([]);
-  const [loadingLeaders, setLoadingLeaders] = useState(false);
   const [submissionError, setSubmissionError] = useState(null);
 
   // Form hook
@@ -28,9 +26,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       name: '',
       department_id: '',
       position_id: '',
-      leader: '',
       rfid_tag: '',
-      emp_stat: 'regular',
       status: 'active',
     },
   });
@@ -49,30 +45,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
 
   // Watch status for conditional logic
   const status = watch('status');
-  const isResigned = status === 'resigned';
-
-  /**
-   * Fetches available leaders from the API
-   */
-  const fetchLeaders = useCallback(async () => {
-    try {
-      setLoadingLeaders(true);
-      setSubmissionError(null);
-      
-      const response = await fetch('/api/admin/leaders?limit=1000');
-      if (!response.ok) {
-        throw new Error('Failed to fetch leaders');
-      }
-      
-      const data = await response.json();
-      setLeaders(data.leaders || []);
-    } catch (error) {
-      console.error('Error fetching leaders:', error);
-      setSubmissionError('Failed to load leaders. Please try again.');
-    } finally {
-      setLoadingLeaders(false);
-    }
-  }, []);
+  const isDiscontinued = status === 'discontinued';
 
   /**
    * Resets form to initial state
@@ -83,9 +56,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       name: '',
       department_id: '',
       position_id: '',
-      leader: '',
       rfid_tag: '',
-      emp_stat: 'regular',
       status: 'active',
     });
     setImagePreview(null);
@@ -102,9 +73,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
     setValue('name', employeeData.name || '');
     setValue('department_id', employeeData.department_id?.toString() || '');
     setValue('position_id', employeeData.position_id?.toString() || '');
-    setValue('leader', employeeData.leader?.toString() || '');
     setValue('rfid_tag', employeeData.rfid_tag || '');
-    setValue('emp_stat', employeeData.emp_stat || 'regular');
     setValue('status', employeeData.status || 'active');
     setImagePreview(employeeData.photo || null);
     setSubmissionError(null);
@@ -168,11 +137,11 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       return false;
     }
 
-    // Validate RFID for active employees
-    if (data.status !== 'resigned' && !data.rfid_tag?.trim()) {
+    // Validate RFID for active trainees
+    if (data.status !== 'discontinued' && !data.rfid_tag?.trim()) {
       setError('rfid_tag', { 
         type: 'manual', 
-        message: 'RFID Tag is required for active employees' 
+        message: 'RFID Tag is required for active trainees' 
       });
       setActiveTab('settings');
       return false;
@@ -196,11 +165,10 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       // Process form data
       const processedData = {
         ...data,
-        leader: data.leader === 'none' ? null : data.leader,
       };
 
-      // Handle resigned employee data
-      if (processedData.status === 'resigned') {
+      // Handle discontinued trainee data
+      if (processedData.status === 'discontinued') {
         processedData.rfid_tag = null;
         processedData.removePhoto = true;
       }
@@ -208,7 +176,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       // Submit form
       const result = await onSubmit(
         processedData, 
-        processedData.status === 'resigned' ? null : imagePreview
+        processedData.status === 'discontinued' ? null : imagePreview
       );
 
       // Reset form on successful submission
@@ -217,7 +185,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       }
     } catch (error) {
       console.error('Form submission error:', error);
-      setSubmissionError(error.message || 'Failed to save employee. Please try again.');
+      setSubmissionError(error.message || 'Failed to save trainee. Please try again.');
     }
   }, [validateFormData, onSubmit, imagePreview, resetForm]);
 
@@ -229,18 +197,17 @@ export const useTraineeForm = (employee, open, onSubmit) => {
       } else {
         resetForm();
       }
-      fetchLeaders();
     }
-  }, [open, employee, populateForm, resetForm, fetchLeaders]);
+  }, [open, employee, populateForm, resetForm]);
 
-  // Handle status changes for resigned employees
+  // Handle status changes for discontinued trainees
   useEffect(() => {
-    if (employee && isResigned) {
+    if (employee && isDiscontinued) {
       setValue('rfid_tag', '');
       setImagePreview(null);
       setActiveTab('settings');
     }
-  }, [isResigned, employee, setValue]);
+  }, [isDiscontinued, employee, setValue]);
 
   return {
     // Form state
@@ -251,7 +218,7 @@ export const useTraineeForm = (employee, open, onSubmit) => {
     errors,
     isSubmitting,
     status,
-    isResigned,
+    isDiscontinued,
 
     // Image state
     imagePreview,
@@ -261,10 +228,6 @@ export const useTraineeForm = (employee, open, onSubmit) => {
     // Tab state
     activeTab,
     setActiveTab,
-
-    // Leaders state
-    leaders,
-    loadingLeaders,
 
     // Error state
     submissionError,

@@ -85,7 +85,7 @@ export const useTraineesManager = () => {
   }, [pagination.pageIndex, pagination.pageSize, filters, searchQuery, enqueueSnackbar]);
 
   /**
-   * Fetches metadata (departments, positions, leaders) for form options
+   * Fetches metadata (departments, positions) for form options
    */
   const fetchMetadata = useCallback(async () => {
     try {
@@ -118,8 +118,8 @@ export const useTraineesManager = () => {
   }, [enqueueSnackbar]);
 
   /**
-   * Handles employee form submission (create/update)
-   * @param {Object} formData - Employee form data
+   * Handles trainee form submission (create/update)
+   * @param {Object} formData - Trainee form data
    * @param {string} imagePreview - Base64 image data
    */
   const handleTraineeSubmit = useCallback(async (formData, imagePreview) => {
@@ -127,9 +127,12 @@ export const useTraineesManager = () => {
       setSubmitting(true);
       setError(null);
 
-      const method = currentTrainee ? 'PUT' : 'POST';
-      const url = currentTrainee 
-        ? `/api/admin/trainees/${currentTrainee.id}`
+      const isUpdating = !!currentTrainee;
+      const method = isUpdating ? 'PUT' : 'POST';
+      
+      // Use the database ID for updates, not the trainee_id field
+      const url = isUpdating 
+        ? `/api/admin/trainees/${currentTrainee.id || currentTrainee._id}`
         : '/api/admin/trainees';
 
       const apiData = {
@@ -156,7 +159,7 @@ export const useTraineesManager = () => {
       await fetchTrainees();
       
       enqueueSnackbar(
-        `Trainee ${currentTrainee ? 'updated' : 'added'} successfully`, 
+        `Trainee ${isUpdating ? 'updated' : 'added'} successfully`, 
         { variant: 'success' }
       );
     } catch (error) {
@@ -183,7 +186,7 @@ export const useTraineesManager = () => {
    * Resets all filters to default values
    */
   const resetFilters = useCallback(() => {
-    setFilters({ department: '', position: '', leader: '', status: '' });
+    setFilters({ department: '', position: '', status: '' });
     setSearchQuery('');
     setPagination({ pageIndex: 0, pageSize: 10 });
   }, []);

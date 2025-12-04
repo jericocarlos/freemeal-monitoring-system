@@ -44,7 +44,7 @@ const TraineeDetailsTab = memo(({
         
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Trainee ID */}
-          {/* <div className="space-y-2">
+          <div className="space-y-2">
             <Label htmlFor="ashima_id" className="text-sm font-medium">
               Trainee ID <span className="text-destructive" aria-label="required">*</span>
             </Label>
@@ -58,8 +58,8 @@ const TraineeDetailsTab = memo(({
               {...register('ashima_id', { 
                 required: 'Trainee ID is required',
                 pattern: {
-                  value: /^[A-Za-z0-9-_]+$/,
-                  message: 'Trainee ID can only contain letters, numbers, hyphens, and underscores'
+                  value: /^[0-9-_]+$/,
+                  message: 'Trainee ID can only contain numbers, hyphens, and underscores'
                 }
               })}
             />
@@ -77,7 +77,7 @@ const TraineeDetailsTab = memo(({
                 Trainee ID cannot be changed after creation
               </p>
             )}
-          </div> */}
+          </div>
 
           {/* Full Name */}
           <div className="space-y-2">

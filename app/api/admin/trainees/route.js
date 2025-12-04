@@ -21,27 +21,26 @@ export async function GET(req) {
     // Dynamic WHERE clause for search and filters
     const whereClause = `
       WHERE 
-        (e.ashima_id LIKE ? OR e.name LIKE ?)
+        (t.ashima_id LIKE ? OR t.name LIKE ?)
         ${department ? `AND d.id = ?` : ""}
         ${position ? `AND p.id = ?` : ""}
-        ${status ? `AND e.status = ?` : ""}
+        ${status ? `AND t.status = ?` : ""}
     `;
 
     const query = `
       SELECT 
-        e.id, e.ashima_id, e.name, 
-        d.name AS department, p.name AS position, 
-        e.rfid_tag, e.photo, e.emp_stat, e.status,
-        e.department_id, e.position_id
+        t.ashima_id, t.name,
+        d.name AS department, p.name AS position,
+        t.rfid_tag, t.photo,  t.status
       FROM 
-        employees e
+        trainees t
       LEFT JOIN 
-        departments d ON e.department_id = d.id
+        departments d ON t.department_id = d.id
       LEFT JOIN 
-        positions p ON e.position_id = p.id
+        positions p ON t.position_id = p.id
       ${whereClause}
       ORDER BY 
-        e.id DESC
+        t.id DESC
       LIMIT ? OFFSET ?
     `;
 
@@ -55,19 +54,19 @@ export async function GET(req) {
       offset,
     ];
 
-    const employees = await executeQuery({ query, values });
-    const formattedEmployees = employees.map((employee) => ({
-      ...employee,
-      photo: employee.photo
-        ? `data:image/jpeg;base64,${Buffer.from(employee.photo).toString('base64')}`
+    const trainees = await executeQuery({ query, values });
+    const formattedTrainees = trainees.map((trainee) => ({
+      ...trainee,
+      photo: trainee.photo
+        ? `data:image/jpeg;base64,${Buffer.from(trainee.photo).toString('base64')}`
         : null,
     }));
 
     const countQuery = `
       SELECT COUNT(*) AS total 
-      FROM employees e
-      LEFT JOIN departments d ON e.department_id = d.id
-      LEFT JOIN positions p ON e.position_id = p.id
+      FROM trainees t
+      LEFT JOIN departments d ON t.department_id = d.id
+      LEFT JOIN positions p ON t.position_id = p.id
       ${whereClause}
     `;
 
@@ -82,15 +81,15 @@ export async function GET(req) {
     const totalResult = await executeQuery({ query: countQuery, values: countValues });
 
     return NextResponse.json({
-      data: formattedEmployees,
+      data: formattedTrainees,
       total: totalResult[0]?.total || 0,
       page,
       limit,
     });
   } catch (err) {
-    console.error("Failed to fetch employees:", err);
+    console.error("Failed to fetch trainees:", err);
     return NextResponse.json(
-      { message: "Failed to fetch employees" },
+      { message: "Failed to fetch trainees" },
       { status: 500 }
     );
   }
@@ -100,23 +99,23 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { name, rfid_tag, photo, trainee_stat, status, department_id, position_id } = body;
+    const { ashima_id, name, rfid_tag, photo, trainee_stat, status, department_id, position_id } = body;
 
     // Decode Base64 photo to binary
     const binaryPhoto = photo ? decodeBase64ToBinary(photo) : null;
 
     const insertQuery = `
-      INSERT INTO trainees (name, rfid_tag, photo, trainee_stat, status, department_id, position_id)
+      INSERT INTO trainees (ashima_id, name, rfid_tag, photo, status, department_id, position_id)
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await executeQuery({
       query: insertQuery,
       values: [
+        ashima_id,
         name,
         rfid_tag || null,
         binaryPhoto,
-        trainee_stat || null,
         status || null,
         department_id ? parseInt(department_id, 10) : null,
         position_id ? parseInt(position_id, 10) : null,

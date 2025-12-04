@@ -16,7 +16,7 @@ export default function DashboardStats() {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const response = await fetch("/api/admin/employees/stats");
+      const response = await fetch("/api/admin/trainees/stats");
       if (!response.ok) throw new Error("Failed to fetch stats");
 
       const data = await response.json();

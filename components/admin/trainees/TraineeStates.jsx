@@ -44,33 +44,14 @@ export const EmptyState = memo(({
       
       <div className="text-center space-y-2">
         <h3 className="text-lg font-semibold">
-          {hasFilters ? 'No employees found' : 'No employees yet'}
+          {hasFilters ? 'No trainees found' : 'No trainees yet'}
         </h3>
         <p className="text-muted-foreground max-w-md">
           {hasFilters 
-            ? 'No employees match your current search criteria. Try adjusting your filters or search terms.'
-            : 'Get started by adding your first employee to the system.'
+            ? 'No trainees match your current search criteria. Try adjusting your filters or search terms.'
+            : 'Get started by adding your first trainee to the system.'
           }
         </p>
-      </div>
-
-      <div className="flex gap-2">
-        {hasFilters ? (
-          <>
-            <Button variant="outline" onClick={onResetFilters}>
-              Clear filters
-            </Button>
-            <Button onClick={onAddTrainee}>
-              <FiUserPlus className="mr-2 h-4 w-4" />
-              Add Trainee
-            </Button>
-          </>
-        ) : (
-          <Button onClick={onAddTrainee}>
-            <FiUserPlus className="mr-2 h-4 w-4" />
-            Add First Trainee
-          </Button>
-        )}
       </div>
     </CardContent>
   </Card>

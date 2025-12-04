@@ -83,24 +83,6 @@ export default function AddEditDialog({ onSave, itemName, editItem = null, open,
               autoFocus
             />
           </div>
-          {/* Only show the checkbox if this is the Position form */}
-          {itemName.toLowerCase() === "position" && (
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="isLeader" className="text-right">
-                Leader
-              </Label>
-              <label className="flex items-center gap-2 col-span-3">
-                <input
-                  id="isLeader"
-                  type="checkbox"
-                  checked={isLeader}
-                  onChange={e => setIsLeader(e.target.checked)}
-                  className="h-4 w-4"
-                />
-                <span className="text-sm">{isLeader ? 'Yes' : 'No'}</span>
-              </label>
-            </div>
-          )}
         </div>
         
         <DialogFooter>

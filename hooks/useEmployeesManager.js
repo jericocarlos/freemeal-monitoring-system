@@ -25,7 +25,6 @@ export const useEmployeesManager = () => {
   const [filters, setFilters] = useState({ 
     department: '', 
     position: '', 
-    leader: '', 
     status: '' 
   });
   const [pagination, setPagination] = useState({ 
@@ -36,7 +35,6 @@ export const useEmployeesManager = () => {
   // Metadata state
   const [departments, setDepartments] = useState([]);
   const [positions, setPositions] = useState([]);
-  const [leaders, setLeaders] = useState([]);
   
   // Dialog state
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
@@ -63,7 +61,6 @@ export const useEmployeesManager = () => {
         department: filters.department || '',
         position: filters.position || '',
         status: filters.status || '',
-        leader: filters.leader || '',
       });
 
       const response = await fetch(`/api/admin/employees?${searchParams}`);
@@ -95,25 +92,22 @@ export const useEmployeesManager = () => {
       setLoadingMetadata(true);
       setError(null);
       
-      const [deptResponse, posResponse, leadersResponse] = await Promise.all([
+      const [deptResponse, posResponse] = await Promise.all([
         fetch('/api/admin/departments'),
         fetch('/api/admin/positions'),
-        fetch('/api/admin/leaders?limit=1000')
       ]);
       
-      if (!deptResponse.ok || !posResponse.ok || !leadersResponse.ok) {
+      if (!deptResponse.ok || !posResponse.ok) {
         throw new Error('Failed to fetch form options');
       }
       
-      const [deptData, posData, leadersData] = await Promise.all([
+      const [deptData, posData] = await Promise.all([
         deptResponse.json(),
         posResponse.json(),
-        leadersResponse.json()
       ]);
       
       setDepartments(deptData.departments || []);
       setPositions(posData.positions || []);
-      setLeaders(leadersData.leaders || []);
     } catch (error) {
       console.error('Error fetching metadata:', error);
       setError(error.message);
@@ -189,7 +183,7 @@ export const useEmployeesManager = () => {
    * Resets all filters to default values
    */
   const resetFilters = useCallback(() => {
-    setFilters({ department: '', position: '', leader: '', status: '' });
+    setFilters({ department: '', position: '', status: '' });
     setSearchQuery('');
     setPagination({ pageIndex: 0, pageSize: 10 });
   }, []);
@@ -216,7 +210,6 @@ export const useEmployeesManager = () => {
     totalEmployees,
     departments,
     positions,
-    leaders,
     
     // Loading states
     loading,

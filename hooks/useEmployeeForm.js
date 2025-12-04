@@ -52,29 +52,6 @@ export const useEmployeeForm = (employee, open, onSubmit) => {
   const isResigned = status === 'resigned';
 
   /**
-   * Fetches available leaders from the API
-   */
-  const fetchLeaders = useCallback(async () => {
-    try {
-      setLoadingLeaders(true);
-      setSubmissionError(null);
-      
-      const response = await fetch('/api/admin/leaders?limit=1000');
-      if (!response.ok) {
-        throw new Error('Failed to fetch leaders');
-      }
-      
-      const data = await response.json();
-      setLeaders(data.leaders || []);
-    } catch (error) {
-      console.error('Error fetching leaders:', error);
-      setSubmissionError('Failed to load leaders. Please try again.');
-    } finally {
-      setLoadingLeaders(false);
-    }
-  }, []);
-
-  /**
    * Resets form to initial state
    */
   const resetForm = useCallback(() => {
@@ -229,9 +206,8 @@ export const useEmployeeForm = (employee, open, onSubmit) => {
       } else {
         resetForm();
       }
-      fetchLeaders();
     }
-  }, [open, employee, populateForm, resetForm, fetchLeaders]);
+  }, [open, employee, populateForm, resetForm]);
 
   // Handle status changes for resigned employees
   useEffect(() => {

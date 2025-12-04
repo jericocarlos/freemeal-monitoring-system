@@ -32,39 +32,6 @@ const EmployeeActions = memo(({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      {/* Export/Import Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            disabled={loading}
-            aria-label="Export or import employee data"
-          >
-            <FiDownload className="mr-2 h-4 w-4" />
-            Export/Import
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem
-            onClick={onExportEmployees}
-            disabled={loading || totalEmployees === 0}
-            className="cursor-pointer"
-          >
-            <FiDownload className="mr-2 h-4 w-4" />
-            Export to CSV
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={onImportEmployees}
-            disabled={loading}
-            className="cursor-pointer"
-          >
-            <FiUpload className="mr-2 h-4 w-4" />
-            Import from CSV
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
       {/* Add Employee Button */}
       <Button
         onClick={onAddEmployee}

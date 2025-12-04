@@ -46,7 +46,6 @@ import FormErrorDisplay from "./FormErrorDisplay";
  * @param {Object|null} props.employee - Employee data for editing (null for new)
  * @param {Array} props.departments - Available departments
  * @param {Array} props.positions - Available positions  
- * @param {Array} props.leaders - Available leaders
  * @param {Function} props.onSubmit - Form submission handler
  * @param {boolean} props.isLoadingOptions - Loading state for form options
  * @param {boolean} props.isSubmitting - External submission loading state
@@ -57,7 +56,6 @@ const EmployeeFormDialog = memo(({
   employee = null,
   departments = [],
   positions = [],
-  leaders = [],
   onSubmit,
   isLoadingOptions = false,
   isSubmitting = false
@@ -76,8 +74,6 @@ const EmployeeFormDialog = memo(({
     removeImage,
     activeTab,
     setActiveTab,
-    leaders: hookLeaders,
-    loadingLeaders,
     submissionError,
     setSubmissionError,
   } = useEmployeeForm(employee, open, onSubmit);
@@ -87,9 +83,6 @@ const EmployeeFormDialog = memo(({
   
   // Combine loading states
   const isFormSubmitting = formIsSubmitting || isSubmitting;
-
-  // Use leaders from hook if not provided as prop
-  const availableLeaders = leaders.length > 0 ? leaders : hookLeaders;
 
   /**
    * Handles dialog close with confirmation if form has changes
@@ -192,9 +185,7 @@ const EmployeeFormDialog = memo(({
                 errors={errors}
                 departments={departments}
                 positions={positions}
-                leaders={availableLeaders}
                 isEditing={isEditing}
-                loadingLeaders={loadingLeaders}
                 loadingOptions={isLoadingOptions}
               />
             </TabsContent>

@@ -59,7 +59,7 @@ const SearchAndFilterControls = memo(({
       <div className="relative flex-1 max-w-md">
         <Input
           type="search"
-          placeholder="Search employees by name, email, or employee ID..."
+          placeholder="Search employees by name or ashima ID..."
           value={searchQuery}
           onChange={handleSearchChange}
           onKeyDown={handleSearchKeyDown}
@@ -76,22 +76,6 @@ const SearchAndFilterControls = memo(({
             {activeFiltersCount} filter{activeFiltersCount !== 1 ? 's' : ''} active
           </Badge>
         )}
-
-        {/* Filter Dialog Button */}
-        <Button
-          variant="outline"
-          onClick={onOpenFilter}
-          disabled={loading}
-          aria-label={`Open filter dialog${hasActiveFilters ? ` (${activeFiltersCount} active)` : ''}`}
-        >
-          <FiFilter className="mr-2 h-4 w-4" />
-          Filter
-          {hasActiveFilters && (
-            <Badge variant="destructive" className="ml-2 h-5 w-5 p-0 text-xs">
-              {activeFiltersCount}
-            </Badge>
-          )}
-        </Button>
 
         {/* Refresh Button */}
         <Button

@@ -4,7 +4,7 @@
  */
 
 import React, { memo } from 'react';
-import { FiPlus, FiDownload, FiUpload } from 'react-icons/fi';
+import { FiUserPlus, FiDownload, FiUpload } from 'react-icons/fi';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -32,39 +32,6 @@ const TraineeActions = memo(({
 }) => {
   return (
     <div className="flex items-center gap-2">
-      {/* Export/Import Dropdown */}
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            disabled={loading}
-            aria-label="Export or import trainee data"
-          >
-            <FiDownload className="mr-2 h-4 w-4" />
-            Export/Import
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48">
-          <DropdownMenuItem
-            onClick={onExportTrainees}
-            disabled={loading || totalTrainees === 0}
-            className="cursor-pointer"
-          >
-            <FiDownload className="mr-2 h-4 w-4" />
-            Export to CSV
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={onImportTrainees}
-            disabled={loading}
-            className="cursor-pointer"
-          >
-            <FiUpload className="mr-2 h-4 w-4" />
-            Import from CSV
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-
       {/* Add Trainee Button */}
       <Button
         onClick={onAddTrainee}
@@ -72,7 +39,7 @@ const TraineeActions = memo(({
         aria-label="Add new trainee"
         className="bg-primary hover:bg-primary/90"
       >
-        <FiPlus className="mr-2 h-4 w-4" />
+        <FiUserPlus className="mr-2 h-4 w-4" />
         Add Trainee
       </Button>
     </div>

@@ -29,7 +29,6 @@ export async function PUT(req, context) {
       name,
       department_id,
       position_id,
-      leader, // <-- use leader instead of supervisor_id
       rfid_tag,
       photo,
       emp_stat,
@@ -66,9 +65,6 @@ export async function PUT(req, context) {
 
     updateFields.push("position_id = ?");
     values.push(position_id);
-
-    updateFields.push("leader = ?"); // <-- use leader
-    values.push(leader || null);
 
     updateFields.push("rfid_tag = ?");
     values.push(status === "resigned" || !rfid_tag ? null : rfid_tag);

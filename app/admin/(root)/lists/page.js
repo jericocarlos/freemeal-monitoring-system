@@ -2,7 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { DepartmentList, PositionList, LeaderList } from '@/components/admin/lists';
+import { DepartmentList, PositionList } from '@/components/admin/lists';
 
 export default function ListsPage() {
   return (
@@ -11,7 +11,6 @@ export default function ListsPage() {
         <TabsList className="grid w-full grid-cols-3 mb-6">
           <TabsTrigger value="departments">Departments</TabsTrigger>
           <TabsTrigger value="positions">Positions</TabsTrigger>
-          <TabsTrigger value="supervisors">Leaders</TabsTrigger>
         </TabsList>
         <TabsContent value="departments">
           <Card>
@@ -36,19 +35,6 @@ export default function ListsPage() {
             </CardHeader>
             <CardContent>
               <PositionList />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value="supervisors">
-          <Card>
-            <CardHeader>
-              <CardTitle>Leaders</CardTitle>
-              <CardDescription>
-                Manage leaders in your organization.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <LeaderList />
             </CardContent>
           </Card>
         </TabsContent>
