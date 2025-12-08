@@ -13,7 +13,7 @@ export const MODULE_DEFINITIONS = {
   employees_management: {
     name: 'Employees',
     href: '/admin/employees-management',
-    icon: <Users className="h-6 w-6" />,
+    icon: <UserCog className="h-6 w-6" />,
     color: 'blue',
     description: 'Manage employee records',
     ariaLabel: 'Navigate to employee management'
@@ -21,10 +21,18 @@ export const MODULE_DEFINITIONS = {
   trainees_management: {
     name: 'Trainees',
     href: '/admin/trainees-management',
-    icon: <Users className="h-6 w-6" />,
+    icon: <UserCog className="h-6 w-6" />,
     color: 'blue',
     description: 'Manage trainee records',
     ariaLabel: 'Navigate to trainee management'
+  },
+  interns_management: {
+    name: 'Interns',
+    href: '/admin/interns-management',
+    icon: <UserCog className="h-6 w-6" />,
+    color: 'blue',
+    description: 'Manage intern records',
+    ariaLabel: 'Navigate to intern management'
   },
   data_management: {
     name: 'Lists',

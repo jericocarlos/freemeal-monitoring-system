@@ -21,7 +21,6 @@ export async function POST(request) {
         d.name AS department, 
         p.name AS position, 
         e.photo, 
-        e.emp_stat, 
         e.status
       FROM employees e
       LEFT JOIN departments d ON e.department_id = d.id
@@ -102,21 +101,21 @@ export async function POST(request) {
     }
 
     // Update status/last_active as before
-    if (employee.status === 'inactive') {
-      const updateStatusQuery = `
-        UPDATE employees
-        SET status = 'active', last_active = NOW()
-        WHERE ashima_id = ?
-      `;
-      await executeQuery({ query: updateStatusQuery, values: [employee.ashima_id] });
-    } else {
-      const updateLastActiveQuery = `
-        UPDATE employees
-        SET last_active = NOW()
-        WHERE ashima_id = ?
-      `;
-      await executeQuery({ query: updateLastActiveQuery, values: [employee.ashima_id] });
-    }
+    // if (employee.status === 'inactive') {
+    //   const updateStatusQuery = `
+    //     UPDATE employees
+    //     SET status = 'active', last_active = NOW()
+    //     WHERE ashima_id = ?
+    //   `;
+    //   await executeQuery({ query: updateStatusQuery, values: [employee.ashima_id] });
+    // } else {
+    //   const updateLastActiveQuery = `
+    //     UPDATE employees
+    //     SET last_active = NOW()
+    //     WHERE ashima_id = ?
+    //   `;
+    //   await executeQuery({ query: updateLastActiveQuery, values: [employee.ashima_id] });
+    // }
 
     // Return the latest attendance entry for this user
     const mergedLogsQuery = `

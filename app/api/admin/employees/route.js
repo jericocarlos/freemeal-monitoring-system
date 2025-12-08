@@ -31,7 +31,7 @@ export async function GET(req) {
       SELECT 
         e.id, e.ashima_id, e.name, 
         d.name AS department, p.name AS position, 
-        e.rfid_tag, e.photo, e.emp_stat, e.status,
+        e.rfid_tag, e.photo, e.status,
         e.department_id, e.position_id
       FROM 
         employees e
@@ -100,14 +100,14 @@ export async function GET(req) {
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { ashima_id, name, department_id, position_id, rfid_tag, photo, emp_stat } = body;
+    const { ashima_id, name, department_id, position_id, rfid_tag, photo } = body;
 
     // Decode Base64 photo to binary
     const binaryPhoto = photo ? decodeBase64ToBinary(photo) : null;
 
     const insertQuery = `
-      INSERT INTO employees (ashima_id, name, department_id, position_id, rfid_tag, photo, emp_stat, status)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO employees (ashima_id, name, department_id, position_id, rfid_tag, photo, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     const result = await executeQuery({
@@ -119,7 +119,6 @@ export async function POST(req) {
         position_id ? parseInt(position_id, 10) : null,
         rfid_tag || null,
         binaryPhoto,
-        emp_stat || "regular",
         "active"
       ]
     });

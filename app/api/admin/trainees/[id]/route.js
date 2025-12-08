@@ -24,6 +24,9 @@ export async function PUT(req, context) {
     const { id } = await context.params; // 👈 Add await here
     const body = await req.json();
 
+    console.log("Received PUT request for trainee ID:", id);
+    console.log("Request body:", body);
+
     const {
       ashima_id,
       name,

@@ -4,18 +4,19 @@ import { getToken } from "next-auth/jwt";
 // Route to module mapping
 const routeModuleMap = {
   '/admin/employees-management': 'employees_management',
+   '/admin/trainees-management': 'trainees_management',
+  '/admin/interns-management': 'interns_management',
   '/admin/lists': 'data_management',
   '/admin/account-logins': 'account_logins',
-  '/admin/attendance-logs': 'attendance_logs',
   '/admin/role-permissions': 'role_permissions'
 };
 
 // Default permissions for fallback (when database is unavailable)
 const defaultPermissions = {
-  superadmin: ['employees_management', 'data_management', 'account_logins', 'attendance_logs', 'role_permissions'],
-  admin: ['employees_management', 'data_management', 'account_logins', 'attendance_logs'],
-  // security: ['attendance_logs'],
-  hr: ['attendance_logs', 'employees_management'] // Make sure HR has employees_management
+  superadmin: ['employees_management', 'trainees_management', 'interns_management', 'data_management', 'account_logins', 'role_permissions'],
+  admin: ['employees_management', 'trainees_management', 'interns_management', 'data_management', 'account_logins'],
+  hr: ['employees_management'], // Make sure HR has employees_management
+  recruitment: ['trainees_management', 'interns_management'] // Make sure Recruitment has trainees and interns management
 };
 
 // Cache for database permissions (5 minute TTL)
@@ -185,6 +186,12 @@ export async function middleware(req) {
   // Clear cache for HR role to force fresh check (temporary debugging)
   if (role === 'hr') {
     console.log(`[MIDDLEWARE] Clearing cache for HR role to force fresh check`);
+    permissionsCache.delete(`middleware_permissions_${role}`);
+  }
+
+   // Clear cache for Recruitment role to force fresh check (temporary debugging)
+  if (role === 'recruitment') {
+    console.log(`[MIDDLEWARE] Clearing cache for Recruitment role to force fresh check`);
     permissionsCache.delete(`middleware_permissions_${role}`);
   }
 

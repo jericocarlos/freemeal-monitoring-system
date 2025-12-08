@@ -42,7 +42,12 @@ export const MODULES = [
     description: 'Manage trainee records, profiles, and information',
     category: 'Core'
   },
-  
+  { 
+    value: 'interns_management', 
+    label: 'Interns Management', 
+    description: 'Manage intern records, profiles, and information',
+    category: 'Core'
+  },
   { 
     value: 'data_management', 
     label: 'Data Management', 
@@ -54,12 +59,6 @@ export const MODULES = [
     label: 'Account Logins', 
     description: 'Manage admin user accounts and authentication',
     category: 'Admin'
-  },
-  { 
-    value: 'attendance_logs', 
-    label: 'Attendance Logs', 
-    description: 'View and manage employee attendance records',
-    category: 'Core'
   },
   { 
     value: 'role_permissions', 
@@ -79,11 +78,11 @@ export const PERMISSIONS = [
 
 // Module icons mapping
 export const MODULE_ICONS = {
-  employees_management: 'Users',
-  trainees_management: 'Users',
+  employees_management: 'UserCog',
+  trainees_management: 'UserCog',
+  interns_management: 'UserCog',
   data_management: 'Database', 
-  account_logins: 'UserCog',
-  attendance_logs: 'Calendar',
+  account_logins: 'Users',
   role_permissions: 'Shield'
 };
 

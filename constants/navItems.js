@@ -6,12 +6,17 @@ export const NAV_ITEMS = {
     {
       name: 'Employees Management',
       href: '/admin/employees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Trainees Management',
       href: '/admin/trainees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
+    },
+    {
+      name: 'Interns Management',
+      href: '/admin/interns-management',
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Data Management',
@@ -39,12 +44,17 @@ export const NAV_ITEMS = {
     {
       name: 'Employees Management',
       href: '/admin/employees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Trainees Management',
       href: '/admin/trainees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
+    },
+    {
+      name: 'Interns Management',
+      href: '/admin/interns-management',
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Data Management',
@@ -54,7 +64,7 @@ export const NAV_ITEMS = {
     {
       name: 'Account Logins',
       href: '/admin/account-logins',
-      icon: <UserCog className="h-[18px] w-[18px]" />,
+      icon: <Users className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Free Meal Logs',
@@ -67,7 +77,7 @@ export const NAV_ITEMS = {
     {
       name: 'Employees Management',
       href: '/admin/employees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Free Meal Logs',
@@ -75,12 +85,17 @@ export const NAV_ITEMS = {
       icon: <Calendar className="h-[18px] w-[18px]" />,
     },
   ],
-  // Recruitment only gets Trainees Management
+  // Recruitment only gets Trainees & Interns Management
   recruitment: [
     {
       name: 'Trainees Management',
       href: '/admin/trainees-management',
-      icon: <Users className="h-[18px] w-[18px]" />,
+      icon: <UserCog className="h-[18px] w-[18px]" />,
+    },
+    {
+      name: 'Interns Management',
+      href: '/admin/interns-management',
+      icon: <UserCog className="h-[18px] w-[18px]" />,
     },
   ],
 };

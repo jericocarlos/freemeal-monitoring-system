@@ -58,7 +58,7 @@ export default function Home() {
         </AnimatePresence>
 
         {/* Employee data display */}
-        <AnimatePresence>1334683099
+        <AnimatePresence>
           
           {employeeInfo && (
             <motion.div 
