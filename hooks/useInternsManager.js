@@ -170,6 +170,48 @@ export const useInternsManager = () => {
     }
   }, [currentIntern, fetchInterns, enqueueSnackbar]);
 
+  
+  /**
+   * Deletes an intern
+   * @param {Object} intern - Intern to delete
+   */
+  const deleteIntern = useCallback(async (intern) => {
+    if (!intern?.id) {
+      enqueueSnackbar('Intern ID is required for deletion', { variant: 'error' });
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError(null);
+
+      const response = await fetch(`/api/admin/interns/${intern.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete intern');
+      }
+
+      // Refresh data
+      await fetchInterns();
+      
+      enqueueSnackbar('Intern deleted successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error deleting intern:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to delete intern', { 
+        variant: 'error' 
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }, [fetchInterns, enqueueSnackbar]);
+  
   /**
    * Opens the intern form dialog
    * @param {Object|null} intern - Intern to edit, or null for new intern
@@ -235,6 +277,7 @@ export const useInternsManager = () => {
     
     // Actions
     handleInternSubmit,
+    deleteIntern,
     openInternForm,
     resetFilters,
     refreshInterns,

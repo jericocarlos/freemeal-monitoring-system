@@ -152,33 +152,3 @@ export async function POST(req) {
     );
   }
 }
-
-// DELETE: Delete an Intern
-export async function DELETE(req) {
-  try {
-    const { searchParams } = new URL(req.url);
-    const id = searchParams.get("id");
-
-    if (!id) {
-      return NextResponse.json(
-        { message: "Intern ID is required" },
-        { status: 400 }
-      );
-    }
-
-    const query = `
-      DELETE FROM interns 
-      WHERE id = ?
-    `;
-
-    await executeQuery({ query, values: [id] });
-
-    return NextResponse.json({ message: "Intern deleted successfully" });
-  } catch (err) {
-    console.error("Failed to delete intern:", err);
-    return NextResponse.json(
-      { message: "Failed to delete intern" },
-      { status: 500 }
-    );
-  }
-}

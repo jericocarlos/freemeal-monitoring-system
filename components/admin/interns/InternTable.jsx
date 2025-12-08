@@ -39,6 +39,7 @@ export default function InternTable({
   pagination, 
   setPagination,
   onEdit,
+  onDelete,
 }) {
   const [sorting, setSorting] = useState([]);
   
@@ -120,6 +121,17 @@ export default function InternTable({
             onClick={() => onEdit(row.original)}
           >
             <FiEdit className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this data?")) {
+                onDelete(row.original);
+              }
+            }}
+          >
+            <FiTrash2 className="h-4 w-4" />
           </Button>
         </div>
       ),

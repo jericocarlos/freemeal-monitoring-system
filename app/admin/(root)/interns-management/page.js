@@ -69,6 +69,7 @@ export default function InternsManagementPage() {
     
     // Actions
     handleInternSubmit,
+    deleteIntern,
     openInternForm,
     resetFilters,
     refreshInterns,
@@ -149,6 +150,7 @@ export default function InternsManagementPage() {
         pagination={pagination}
         setPagination={setPagination}
         onEdit={openInternForm}
+        onDelete={deleteIntern}
         loading={loading}
       />
     );

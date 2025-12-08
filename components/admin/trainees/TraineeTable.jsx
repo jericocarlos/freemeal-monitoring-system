@@ -125,7 +125,11 @@ export default function TraineeTable({
           <Button
             variant="outline"
             size="sm"
-            onClick={() => onDelete(row.original)}
+            onClick={() => {
+              if (window.confirm("Are you sure you want to delete this data?")) {
+                onDelete(row.original);
+              }
+            }}
           >
             <FiTrash2 className="h-4 w-4" />
           </Button>
