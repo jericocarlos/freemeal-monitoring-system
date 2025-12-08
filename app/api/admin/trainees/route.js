@@ -6,7 +6,7 @@ function decodeBase64ToBinary(base64String) {
   return Buffer.from(base64String.replace(/^data:image\/\w+;base64,/, ""), "base64");
 }
 
-// GET: Fetch Trainees with Search, Filters, and Pagination
+// GET: Fetch Interns with Search, Filters, and Pagination
 export async function GET(req) {
   try {
     const { searchParams } = new URL(req.url);
@@ -18,20 +18,28 @@ export async function GET(req) {
     const status = searchParams.get("status") || "";
     const offset = (page - 1) * limit;
 
-    // Dynamic WHERE clause for search and filters
-    const whereClause = `
-      WHERE 
-        (t.ashima_id LIKE ? OR t.name LIKE ?)
-        ${department ? `AND d.id = ?` : ""}
-        ${position ? `AND p.id = ?` : ""}
-        ${status ? `AND t.status = ?` : ""}
-    `;
+    // Dynamic WHERE clause for search and filters (exclude discontinued)
+    const whereParts = [
+      "(t.ashima_id LIKE ? OR t.name LIKE ?)"
+    ];
+
+    if (department) whereParts.push("d.id = ?");
+    if (position) whereParts.push("p.id = ?");
+
+    // Always exclude discontinued interns
+    whereParts.push("t.status != 'discontinued'");
+
+    // If a status filter is provided and it's not 'discontinued', include it
+    const includeStatusFilter = status && status !== "discontinued";
+    if (includeStatusFilter) whereParts.push("t.status = ?");
+    const whereClause = `WHERE ${whereParts.join(" AND ")}`;
 
     const query = `
       SELECT 
-        t.ashima_id, t.name,
-        d.name AS department, p.name AS position,
-        t.rfid_tag, t.photo,  t.status
+        t.id, t.ashima_id, t.name, 
+        d.name AS department, p.name AS position, 
+        t.rfid_tag, t.photo, t.status,
+        t.department_id, t.position_id
       FROM 
         trainees t
       LEFT JOIN 
@@ -49,19 +57,20 @@ export async function GET(req) {
       `%${search}%`,
       ...(department ? [department] : []),
       ...(position ? [position] : []),
-      ...(status ? [status] : []),
+      ...(includeStatusFilter ? [status] : []),
       limit,
       offset,
     ];
 
-    const trainees = await executeQuery({ query, values });
-    const formattedTrainees = trainees.map((trainee) => ({
-      ...trainee,
-      photo: trainee.photo
-        ? `data:image/jpeg;base64,${Buffer.from(trainee.photo).toString('base64')}`
+    const interns = await executeQuery({ query, values });
+    const formattedInterns = interns.map((intern) => ({
+      ...intern,
+      photo: intern.photo
+        ? `data:image/jpeg;base64,${Buffer.from(intern.photo).toString('base64')}`
         : null,
     }));
 
+    // Count query uses same whereClause and similar values (without limit/offset)
     const countQuery = `
       SELECT COUNT(*) AS total 
       FROM trainees t
@@ -75,13 +84,13 @@ export async function GET(req) {
       `%${search}%`,
       ...(department ? [department] : []),
       ...(position ? [position] : []),
-      ...(status ? [status] : []),
+      ...(includeStatusFilter ? [status] : []),
     ];
 
     const totalResult = await executeQuery({ query: countQuery, values: countValues });
 
     return NextResponse.json({
-      data: formattedTrainees,
+      data: formattedInterns,
       total: totalResult[0]?.total || 0,
       page,
       limit,
@@ -94,12 +103,11 @@ export async function GET(req) {
     );
   }
 }
-
 // POST: Add a New Trainee
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { ashima_id, name, rfid_tag, photo, trainee_stat, status, department_id, position_id } = body;
+    const { ashima_id, name, rfid_tag, photo, department_id, position_id } = body;
 
     // Decode Base64 photo to binary
     const binaryPhoto = photo ? decodeBase64ToBinary(photo) : null;
@@ -116,9 +124,9 @@ export async function POST(req) {
         name,
         rfid_tag || null,
         binaryPhoto,
-        status || null,
+        "active",
         department_id ? parseInt(department_id, 10) : null,
-        position_id ? parseInt(position_id, 10) : null,
+        position_id ? parseInt(position_id, 10) : null
       ]
     });
 
@@ -145,24 +153,31 @@ export async function POST(req) {
   }
 }
 
-// DELETE: Delete a Trainee
+// DELETE: Delete an Intern
 export async function DELETE(req) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
-    
+
+    if (!id) {
+      return NextResponse.json(
+        { message: "Intern ID is required" },
+        { status: 400 }
+      );
+    }
+
     const query = `
-      DELETE FROM trainees 
+      DELETE FROM interns 
       WHERE id = ?
     `;
 
     await executeQuery({ query, values: [id] });
 
-    return NextResponse.json({ message: "Trainee deleted successfully" });
+    return NextResponse.json({ message: "Intern deleted successfully" });
   } catch (err) {
-    console.error("Failed to delete trainee:", err);
+    console.error("Failed to delete intern:", err);
     return NextResponse.json(
-      { message: "Failed to delete trainee" },
+      { message: "Failed to delete intern" },
       { status: 500 }
     );
   }

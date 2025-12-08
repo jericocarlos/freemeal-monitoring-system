@@ -110,8 +110,6 @@ export async function POST(req) {
     const body = await req.json();
     const { ashima_id, name, rfid_tag, photo, department_id, position_id } = body;
 
-    console.log("Received intern data:", body);
-
     // Decode Base64 photo to binary
     const binaryPhoto = photo ? decodeBase64ToBinary(photo) : null;
 

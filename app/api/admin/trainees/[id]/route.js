@@ -18,14 +18,11 @@ function decodeBase64ToBinary(base64String) {
   }
 }
 
-// PUT: Update an Existing Trainee
+// PUT: Update an Existing Intern
 export async function PUT(req, context) {
   try {
     const { id } = await context.params; // 👈 Add await here
     const body = await req.json();
-
-    console.log("Received PUT request for trainee ID:", id);
-    console.log("Request body:", body);
 
     const {
       ashima_id,
@@ -37,14 +34,6 @@ export async function PUT(req, context) {
       status,
       removePhoto
     } = body;
-
-    // Validate required fields
-    if (!ashima_id || !name) {
-      return NextResponse.json(
-        { message: "Ashima ID and Name are required" },
-        { status: 400 }
-      );
-    }
 
     let binaryPhoto = null;
     if (status === "discontinued" || removePhoto) {
