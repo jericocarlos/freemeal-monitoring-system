@@ -53,25 +53,6 @@ export const EmptyState = memo(({
           }
         </p>
       </div>
-
-      <div className="flex gap-2">
-        {hasFilters ? (
-          <>
-            <Button variant="outline" onClick={onResetFilters}>
-              Clear filters
-            </Button>
-            <Button onClick={onAddEmployee}>
-              <FiUserPlus className="mr-2 h-4 w-4" />
-              Add Intern
-            </Button>
-          </>
-        ) : (
-          <Button onClick={onAddIntern}>
-            <FiUserPlus className="mr-2 h-4 w-4" />
-            Add First Intern
-          </Button>
-        )}
-      </div>
     </CardContent>
   </Card>
 ));

@@ -81,7 +81,7 @@ export default function InternsManagementPage() {
     const hasActiveFilters = Object.values(filters).some(Boolean);
     const hasSearchQuery = searchQuery.trim().length > 0;
     const hasFiltersOrSearch = hasActiveFilters || hasSearchQuery;
-    const showEmptyState = !loading && employees.length === 0;
+    const showEmptyState = !loading && interns.length === 0;
     
     return {
       hasActiveFilters,
@@ -120,7 +120,7 @@ export default function InternsManagementPage() {
       return (
         <ErrorState 
           error={error} 
-          onRetry={refreshEmployees} 
+          onRetry={refreshInterns} 
         />
       );
     }
@@ -155,7 +155,7 @@ export default function InternsManagementPage() {
   };
 
   return (
-    <PermissionGuard module="employees_management">
+    <PermissionGuard module="interns_management">
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Dashboard Statistics */}
         {/* <DashboardStats /> */}

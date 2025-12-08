@@ -1,19 +1,19 @@
 /**
- * Custom hook for managing employee data, state, and operations
- * Centralizes all employee-related business logic and API calls
+ * Custom hook for managing intern data, state, and operations
+ * Centralizes all intern-related business logic and API calls
  */
 
 import { useState, useCallback, useEffect } from 'react';
 import { useSnackbar } from 'notistack';
 
 /**
- * Hook for managing employees data and operations
- * @returns {Object} Employee management state and functions
+ * Hook for managing interns data and operations
+ * @returns {Object} Intern management state and functions
  */
-export const useEmployeesManager = () => {
+export const useInternsManager = () => {
   // Core data state
-  const [employees, setEmployees] = useState([]);
-  const [totalEmployees, setTotalEmployees] = useState(0);
+  const [interns, setInterns] = useState([]);
+  const [totalInterns, setTotalInterns] = useState(0);
   
   // Loading states
   const [loading, setLoading] = useState(true);
@@ -39,7 +39,7 @@ export const useEmployeesManager = () => {
   // Dialog state
   const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
   const [isFilterDialogOpen, setIsFilterDialogOpen] = useState(false);
-  const [currentEmployee, setCurrentEmployee] = useState(null);
+  const [currentIntern, setCurrentIntern] = useState(null);
   
   // Error state
   const [error, setError] = useState(null);
@@ -47,9 +47,9 @@ export const useEmployeesManager = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   /**
-   * Fetches employees with current filters and pagination
+   * Fetches interns with current filters and pagination
    */
-  const fetchEmployees = useCallback(async () => {
+  const fetchInterns = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -63,20 +63,20 @@ export const useEmployeesManager = () => {
         status: filters.status || '',
       });
 
-      const response = await fetch(`/api/admin/employees?${searchParams}`);
+      const response = await fetch(`/api/admin/interns?${searchParams}`);
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch employees');
+        throw new Error(errorData.message || 'Failed to fetch interns');
       }
       
       const data = await response.json();
-      setEmployees(data.data || []);
-      setTotalEmployees(data.total || 0);
+      setInterns(data.data || []);
+      setTotalInterns(data.total || 0);
     } catch (error) {
-      console.error('Error fetching employees:', error);
+      console.error('Error fetching interns:', error);
       setError(error.message);
-      enqueueSnackbar(error.message || 'Failed to fetch employees', { 
+      enqueueSnackbar(error.message || 'Failed to fetch interns', { 
         variant: 'error' 
       });
     } finally {
@@ -85,7 +85,7 @@ export const useEmployeesManager = () => {
   }, [pagination.pageIndex, pagination.pageSize, filters, searchQuery, enqueueSnackbar]);
 
   /**
-   * Fetches metadata (departments, positions, leaders) for form options
+   * Fetches metadata (departments, positions) for form options
    */
   const fetchMetadata = useCallback(async () => {
     try {
@@ -118,19 +118,19 @@ export const useEmployeesManager = () => {
   }, [enqueueSnackbar]);
 
   /**
-   * Handles employee form submission (create/update)
-   * @param {Object} formData - Employee form data
+   * Handles intern form submission (create/update)
+   * @param {Object} formData - Intern form data
    * @param {string} imagePreview - Base64 image data
    */
-  const handleEmployeeSubmit = useCallback(async (formData, imagePreview) => {
+  const handleInternSubmit = useCallback(async (formData, imagePreview) => {
     try {
       setSubmitting(true);
       setError(null);
 
-      const method = currentEmployee ? 'PUT' : 'POST';
-      const url = currentEmployee 
-        ? `/api/admin/employees/${currentEmployee.id}`
-        : '/api/admin/employees';
+      const method = currentIntern ? 'PUT' : 'POST';
+      const url = currentIntern 
+        ? `/api/admin/interns/${currentIntern.id}`
+        : '/api/admin/interns';
 
       const apiData = {
         ...formData,
@@ -147,35 +147,35 @@ export const useEmployeesManager = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to save employee');
+        throw new Error(errorData.message || 'Failed to save intern');
       }
 
       // Close dialog and refresh data
       setIsFormDialogOpen(false);
-      setCurrentEmployee(null);
-      await fetchEmployees();
+      setCurrentIntern(null);
+      await fetchInterns();
       
       enqueueSnackbar(
-        `Employee ${currentEmployee ? 'updated' : 'added'} successfully`, 
+        `Intern ${currentIntern ? 'updated' : 'added'} successfully`, 
         { variant: 'success' }
       );
     } catch (error) {
-      console.error('Error submitting employee data:', error);
+      console.error('Error submitting intern data:', error);
       setError(error.message);
-      enqueueSnackbar(error.message || 'Failed to save employee', { 
+      enqueueSnackbar(error.message || 'Failed to save intern', { 
         variant: 'error' 
       });
     } finally {
       setSubmitting(false);
     }
-  }, [currentEmployee, fetchEmployees, enqueueSnackbar]);
+  }, [currentIntern, fetchInterns, enqueueSnackbar]);
 
   /**
-   * Opens the employee form dialog
-   * @param {Object|null} employee - Employee to edit, or null for new employee
+   * Opens the intern form dialog
+   * @param {Object|null} intern - Intern to edit, or null for new intern
    */
-  const openEmployeeForm = useCallback((employee = null) => {
-    setCurrentEmployee(employee);
+  const openInternForm = useCallback((intern = null) => {
+    setCurrentIntern(intern);
     setIsFormDialogOpen(true);
   }, []);
 
@@ -189,25 +189,23 @@ export const useEmployeesManager = () => {
   }, []);
 
   /**
-   * Refreshes employee data
+   * Refreshes intern data
    */
-  const refreshEmployees = useCallback(() => {
-    fetchEmployees();
-  }, [fetchEmployees]);
-
+  const refreshInterns = useCallback(() => {
+    fetchInterns();
+  }, [fetchInterns]);
   // Initial data loading
   useEffect(() => {
-    fetchEmployees();
-  }, [fetchEmployees]);
-
+    fetchInterns();
+  }, [fetchInterns]);
   useEffect(() => {
     fetchMetadata();
   }, [fetchMetadata]);
 
   return {
     // Data state
-    employees,
-    totalEmployees,
+    interns,
+    totalInterns,
     departments,
     positions,
     
@@ -229,18 +227,18 @@ export const useEmployeesManager = () => {
     setIsFormDialogOpen,
     isFilterDialogOpen,
     setIsFilterDialogOpen,
-    currentEmployee,
+    currentIntern,
     
     // Error state
     error,
     setError,
     
     // Actions
-    handleEmployeeSubmit,
-    openEmployeeForm,
+    handleInternSubmit,
+    openInternForm,
     resetFilters,
-    refreshEmployees,
-    fetchEmployees,
+    refreshInterns,
+    fetchInterns,
     fetchMetadata,
   };
 };

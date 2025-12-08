@@ -135,7 +135,7 @@ export default function InternTable({
       pagination,
     },
     manualPagination: true,
-    pageCount: Math.ceil(totalEmployees / pagination.pageSize),
+    pageCount: Math.ceil(totalInterns / pagination.pageSize),
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),

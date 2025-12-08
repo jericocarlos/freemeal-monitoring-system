@@ -67,7 +67,7 @@ const InternFormDialog = memo(({
     errors,
     isSubmitting: formIsSubmitting,
     status,
-    isResigned,
+    isDiscontinued,
     imagePreview,
     handleImageChange,
     removeImage,

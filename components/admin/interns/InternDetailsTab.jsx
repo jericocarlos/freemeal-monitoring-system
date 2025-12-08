@@ -272,7 +272,7 @@ const InternDetailsTab = memo(({
                   <SelectContent>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="resigned">Resigned</SelectItem>
+                    <SelectItem value="discontinued">Discontinued</SelectItem>
                   </SelectContent>
                 </Select>
               )}

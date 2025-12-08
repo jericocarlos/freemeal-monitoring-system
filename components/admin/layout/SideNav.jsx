@@ -24,12 +24,17 @@ const MODULE_DEFINITIONS = {
   employees_management: {
     name: 'Employees Management',
     href: '/admin/employees-management',
-    icon: <Users className="h-[18px] w-[18px]" />,
+    icon: <UserCog className="h-[18px] w-[18px]" />,
   },
   trainees_management: {
     name: 'Trainees Management',
     href: '/admin/trainees-management',
-    icon: <Users className="h-[18px] w-[18px]" />,
+    icon: <UserCog className="h-[18px] w-[18px]" />,
+  },
+  interns_management: {
+    name: 'Interns Management',
+    href: '/admin/interns-management',
+    icon: <UserCog className="h-[18px] w-[18px]" />,
   },
   data_management: {
     name: 'Data Management',
@@ -39,7 +44,7 @@ const MODULE_DEFINITIONS = {
   account_logins: {
     name: 'Account Logins',
     href: '/admin/account-logins',
-    icon: <UserCog className="h-[18px] w-[18px]" />,
+    icon: <Users className="h-[18px] w-[18px]" />,
   },
   attendance_logs: {
     name: 'Free Meal Logs',
