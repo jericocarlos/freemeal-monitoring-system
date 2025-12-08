@@ -99,3 +99,22 @@ export async function PUT(req, context) {
     );
   }
 }
+
+// Delete a trainee
+export async function DELETE(request, context) {
+  try {
+    const { id } = await context.params; // 👈 Add await here
+    
+    // Delete trainee
+    const deleteQuery = `DELETE FROM trainees WHERE id = ?`;
+    await executeQuery({ query: deleteQuery, values: [id] });
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Failed to delete trainee:", error);
+    return NextResponse.json(
+      { error: "Failed to delete trainee" },
+      { status: 500 }
+    );
+  }
+}

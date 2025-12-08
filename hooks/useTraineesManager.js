@@ -173,6 +173,48 @@ export const useTraineesManager = () => {
     }
   }, [currentTrainee, fetchTrainees, enqueueSnackbar]);
 
+
+  /**
+   * Deletes a trainee
+   * @param {Object} trainee - Trainee to delete
+   */
+  const deleteTrainee = useCallback(async (trainee) => {
+    if (!trainee?.id) {
+      enqueueSnackbar('Trainee ID is required for deletion', { variant: 'error' });
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError(null);
+
+      const response = await fetch(`/api/admin/trainees/${trainee.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete trainee');
+      }
+
+      // Refresh data
+      await fetchTrainees();
+      
+      enqueueSnackbar('Trainee deleted successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error deleting trainee:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to delete trainee', { 
+        variant: 'error' 
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }, [fetchTrainees, enqueueSnackbar]);
+
   /**
    * Opens the trainee form dialog
    * @param {Object|null} trainee - Trainee to edit, or null for new trainee
@@ -240,6 +282,7 @@ export const useTraineesManager = () => {
     
     // Actions
     handleTraineeSubmit,
+    deleteTrainee,
     openTraineeForm,
     resetFilters,
     refreshTrainees,

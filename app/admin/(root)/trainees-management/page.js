@@ -69,6 +69,7 @@ export default function TraineesManagementPage() {
     
     // Actions
     handleTraineeSubmit,
+    deleteTrainee,
     openTraineeForm,
     resetFilters,
     refreshTrainees,
@@ -149,6 +150,7 @@ export default function TraineesManagementPage() {
         pagination={pagination}
         setPagination={setPagination}
         onEdit={openTraineeForm}
+        onDelete={deleteTrainee}
         loading={loading}
       />
     );
