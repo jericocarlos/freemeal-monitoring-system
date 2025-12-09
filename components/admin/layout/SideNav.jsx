@@ -46,10 +46,10 @@ const MODULE_DEFINITIONS = {
     href: '/admin/account-logins',
     icon: <Users className="h-[18px] w-[18px]" />,
   },
-  attendance_logs: {
+  freemeal_logs: {
     name: 'Free Meal Logs',
-    href: '/admin/attendance-logs',
-    icon: <Calendar className="h-[18px] w-[18px]" />,
+    href: '/admin/freemeal-logs',
+    icon: <Clipboard className="h-[18px] w-[18px]" />,
   },
   role_permissions: {
     name: 'Role Permissions',

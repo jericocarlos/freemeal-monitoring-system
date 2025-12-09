@@ -4,6 +4,7 @@
 import { 
   Users, 
   CalendarCheck, 
+  Clipboard,
   Database, 
   UserCog, 
   Shield 
@@ -50,10 +51,10 @@ export const MODULE_DEFINITIONS = {
     description: 'Manage user accounts',
     ariaLabel: 'Navigate to account management'
   },
-  attendance_logs: {
+  freemeal_logs: {
     name: 'Free Meal Logs',
-    href: '/admin/attendance-logs',
-    icon: <CalendarCheck className="h-6 w-6" />,
+    href: '/admin/freemeal-logs',
+    icon: <Clipboard className="h-6 w-6" />,
     color: 'green',
     description: 'View free meal records',
     ariaLabel: 'Navigate to free meal logs'

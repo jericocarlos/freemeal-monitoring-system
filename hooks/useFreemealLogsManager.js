@@ -1,5 +1,5 @@
 /**
- * Custom hook for managing attendance logs data, state, and operations
+ * Custom hook for managing freemeal logs data, state, and operations
  * Centralizes all attendance logs related business logic and API calls
  */
 
@@ -25,10 +25,10 @@ const useDebounce = (func, delay = 300) => {
 };
 
 /**
- * Hook for managing attendance logs data and operations
- * @returns {Object} Attendance logs management state and functions
+ * Hook for managing freemeal logs data and operations
+ * @returns {Object} Freemeal logs management state and functions
  */
-export const useAttendanceLogsManager = () => {
+export const useFreemealLogsManager = () => {
   // Core data state
   const [logs, setLogs] = useState([]);
   const [totalLogs, setTotalLogs] = useState(0);
@@ -60,7 +60,7 @@ export const useAttendanceLogsManager = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   /**
-   * Fetches attendance logs with current filters and pagination
+   * Fetches free meal logs with current filters and pagination
    */
   const fetchLogs = useCallback(async () => {
     try {
@@ -81,20 +81,20 @@ export const useAttendanceLogsManager = () => {
           : '',
       });
 
-      const response = await fetch(`/api/admin/attendance-logs?${searchParams}`);
+      const response = await fetch(`/api/admin/freemeal-logs?${searchParams}`);
       
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to fetch attendance logs');
+        throw new Error(errorData.message || 'Failed to fetch freemeal logs');
       }
       
       const data = await response.json();
       setLogs(data.data || []);
       setTotalLogs(data.total || 0);
     } catch (error) {
-      console.error('Error fetching attendance logs:', error);
+      console.error('Error fetching freemeal logs:', error);
       setError(error.message);
-      enqueueSnackbar(error.message || 'Failed to fetch attendance logs', { 
+      enqueueSnackbar(error.message || 'Failed to fetch freemeal logs', { 
         variant: 'error' 
       });
     } finally {
@@ -168,7 +168,7 @@ export const useAttendanceLogsManager = () => {
           : '',
       });
 
-      const response = await fetch(`/api/admin/attendance-logs/export?${searchParams}`);
+      const response = await fetch(`/api/admin/freemeal-logs/export?${searchParams}`);
       
       if (!response.ok) {
         const errorData = await response.json();

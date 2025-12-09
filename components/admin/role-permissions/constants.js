@@ -55,6 +55,12 @@ export const MODULES = [
     category: 'Core'
   },
   { 
+    value: 'freemeal_logs', 
+    label: 'Free Meal Logs', 
+    description: 'Manage free meal logs and records',
+    category: 'Admin'
+  },
+  { 
     value: 'account_logins', 
     label: 'Account Logins', 
     description: 'Manage admin user accounts and authentication',
@@ -82,6 +88,7 @@ export const MODULE_ICONS = {
   trainees_management: 'UserCog',
   interns_management: 'UserCog',
   data_management: 'Database', 
+  freemeal_logs: 'Clipboard',
   account_logins: 'Users',
   role_permissions: 'Shield'
 };

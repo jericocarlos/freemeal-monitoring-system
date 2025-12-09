@@ -1,5 +1,5 @@
 /**
- * AttendanceHeader Component
+ * FreemealHeader Component
  *
  * Renders the header section of the free meal logs page with title, search, filter, and export controls.
  * Includes accessibility features like ARIA labels and keyboard navigation support.
@@ -24,7 +24,7 @@ import { Badge } from "@/components/ui/badge";
  * @param {boolean} props.hasActiveFilters - Whether there are active filters applied
  * @param {Function} props.onResetFilters - Callback to reset all filters
  */
-export default function AttendanceHeader({
+export default function FreemealHeader({
   onFilterClick,
   onExportClick,
   onSearchChange,

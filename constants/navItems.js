@@ -30,8 +30,8 @@ export const NAV_ITEMS = {
     },
     {
       name: 'Free Meal Logs',
-      href: '/admin/attendance-logs',
-      icon: <Calendar className="h-[18px] w-[18px]" />,
+      href: '/admin/freemeal-logs',
+      icon: <Clipboard className="h-[18px] w-[18px]" />,
     },
     {
       name: 'Role Permissions',
@@ -62,14 +62,14 @@ export const NAV_ITEMS = {
       icon: <Database className="h-[18px] w-[18px]" />,
     },
     {
+      name: 'Free Meal Logs',
+      href: '/admin/freemeal-logs',
+      icon: <Clipboard className="h-[18px] w-[18px]" />,
+    },
+    {
       name: 'Account Logins',
       href: '/admin/account-logins',
       icon: <Users className="h-[18px] w-[18px]" />,
-    },
-    {
-      name: 'Free Meal Logs',
-      href: '/admin/attendance-logs',
-      icon: <Calendar className="h-[18px] w-[18px]" />,
     },
   ],
   // HR only gets Free Meal Logs and Employees Management
@@ -81,8 +81,8 @@ export const NAV_ITEMS = {
     },
     {
       name: 'Free Meal Logs',
-      href: '/admin/attendance-logs',
-      icon: <Calendar className="h-[18px] w-[18px]" />,
+      href: '/admin/freemeal-logs',
+      icon: <Clipboard className="h-[18px] w-[18px]" />,
     },
   ],
   // Recruitment only gets Trainees & Interns Management

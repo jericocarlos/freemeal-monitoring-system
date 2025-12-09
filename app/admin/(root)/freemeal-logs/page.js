@@ -1,15 +1,15 @@
 "use client";
 
 import { 
-  AttendanceTable, 
+  FreemealTable, 
   FilterDialog, 
   DashboardStats,
   SearchAndFilterControls,
-  AttendanceHeader,
-  AttendanceStates
-} from "@/components/admin/attendance";
+  FreemealHeader,
+  FreemealStates
+} from "@/components/admin/freemeal";
 import PermissionGuard from "@/components/auth/PermissionGuard";
-import { useAttendanceLogsManager } from "@/hooks/useAttendanceLogsManager";
+import { useFreemealLogsManager } from "@/hooks/useFreemealLogsManager";
 import { Card, CardContent } from "@/components/ui/card";
 
 /**
@@ -24,7 +24,7 @@ import { Card, CardContent } from "@/components/ui/card";
  * - Paginated table view
  * - Accessible UI with ARIA labels and keyboard navigation
  */
-export default function AttendanceLogsPage() {
+export default function FreemealLogsPage() {
   const {
     // Data state
     logs,
@@ -59,21 +59,21 @@ export default function AttendanceLogsPage() {
     openFilterDialog,
     resetFilters,
     refreshLogs,
-  } = useAttendanceLogsManager();
+  } = useFreemealLogsManager();
 
   return (
-    <PermissionGuard module="attendance_logs">
+    <PermissionGuard module="freemeal_logs">
       <div 
         className="container mx-auto px-4 py-8"
         role="main"
         aria-label="Free Meal Logs Management"
       >
         {/* Dashboard Statistics */}
-        <DashboardStats />
+        {/* <DashboardStats /> */}
 
         {/* Main Free Meal Logs Card */}
         <Card>
-          <AttendanceHeader 
+          <FreemealHeader 
             onFilterClick={openFilterDialog}
             onExportClick={handleExportLogs}
             onSearchChange={handleSearchChange}
@@ -83,7 +83,7 @@ export default function AttendanceLogsPage() {
           />
           
           <CardContent>
-            <AttendanceStates 
+            <FreemealStates 
               loading={loading}
               error={error}
               showEmptyState={computedValues.showEmptyState}
@@ -93,7 +93,7 @@ export default function AttendanceLogsPage() {
             />
             
             {!loading && !error && logs.length > 0 && (
-              <AttendanceTable
+              <FreemealTable
                 logs={logs}
                 totalLogs={totalLogs}
                 pagination={pagination}

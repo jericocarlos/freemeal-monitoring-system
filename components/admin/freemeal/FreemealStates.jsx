@@ -1,5 +1,5 @@
 /**
- * AttendanceStates Component
+ * FreemealStates Component
  *
  * Handles and displays various states for the free meal logs view including:
  * - Loading states with skeleton UI
@@ -25,7 +25,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
  * @param {Function} props.onRefresh - Callback to refresh the data
  * @param {Function} props.onResetFilters - Callback to reset all filters
  */
-export default function AttendanceStates({
+export default function FreemealStates({
   loading = false,
   error = null,
   showEmptyState = false,

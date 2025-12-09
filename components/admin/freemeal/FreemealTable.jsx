@@ -1,5 +1,5 @@
 /**
- * AttendanceTable Component
+ * FreemealTable Component
  *
  * Displays free meal logs in a paginated table format with accessible markup.
  * Includes proper ARIA labels, keyboard navigation, and responsive design.
@@ -38,7 +38,7 @@ import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
  * @param {Function} props.setPagination - Function to update pagination state
  * @param {boolean} props.loading - Whether the table is in loading state
  */
-export default function AttendanceTable({
+export default function FreemealTable({
   logs = [],
   totalLogs = 0,
   pagination = { pageIndex: 0, pageSize: 100 },
