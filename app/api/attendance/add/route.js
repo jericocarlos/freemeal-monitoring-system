@@ -14,24 +14,57 @@ export async function POST(request) {
 
     // Fetch employee info
     const employeeQuery = `
-      SELECT 
-        e.id AS employee_id, 
-        e.ashima_id, 
-        e.name, 
-        d.name AS department, 
-        p.name AS position, 
-        e.photo, 
-        e.status
-      FROM employees e
-      LEFT JOIN departments d ON e.department_id = d.id
-      LEFT JOIN positions p ON e.position_id = p.id
-      WHERE e.rfid_tag = ?
+                SELECT 
+                    e.id AS person_id,
+                    e.ashima_id,
+                    e.name,
+                    d.name AS department,
+                    p.name AS position,
+                    e.photo,
+                    e.status,
+                    'employee' AS person_type
+                FROM employees e
+                LEFT JOIN departments d ON e.department_id = d.id
+                LEFT JOIN positions p ON e.position_id = p.id
+                WHERE e.rfid_tag = ?
+
+                UNION ALL
+
+                SELECT 
+                    i.id AS person_id,
+                    i.id_number as ashima_id,
+                    i.name,
+                    d.name AS department,
+                    p.name AS position,
+                    i.photo,
+                    i.status,
+                    'intern' AS person_type
+                FROM interns i
+                LEFT JOIN departments d ON i.department_id = d.id
+                LEFT JOIN positions p ON i.position_id = p.id
+                WHERE i.rfid_tag = ?
+
+                UNION ALL
+
+                SELECT 
+                    t.id AS person_id,
+                    t.ashima_id,
+                    t.name,
+                    d.name AS department,
+                    p.name AS position,
+                    t.photo,
+                    t.status,
+                    'trainee' AS person_type
+                FROM trainees t
+                LEFT JOIN departments d ON t.department_id = d.id
+                LEFT JOIN positions p ON t.position_id = p.id
+                WHERE t.rfid_tag = ?;
     `;
-    const [employee] = await executeQuery({ query: employeeQuery, values: [rfid_tag] });
+    const [employee] = await executeQuery({ query: employeeQuery, values: [rfid_tag, rfid_tag, rfid_tag] });
 
     if (!employee) {
       return NextResponse.json(
-        { error: 'Employee not found for the provided RFID tag.' },
+        { error: 'Person not found for the provided RFID tag.' },
         { status: 404 }
       );
     }
