@@ -31,7 +31,6 @@ export async function PUT(req, context) {
       position_id,
       rfid_tag,
       photo,
-      emp_stat,
       status,
       removePhoto
     } = body;
@@ -74,9 +73,6 @@ export async function PUT(req, context) {
       values.push(binaryPhoto);
     }
 
-    updateFields.push("emp_stat = ?");
-    values.push(emp_stat);
-
     updateFields.push("status = ?");
     values.push(status);
 
@@ -107,6 +103,25 @@ export async function PUT(req, context) {
     console.error("Failed to update employee:", err);
     return NextResponse.json(
       { message: `Failed to update employee: ${err.message}` },
+      { status: 500 }
+    );
+  }
+}
+
+// Delete an employee
+export async function DELETE(request, context) {
+  try {
+    const { id } = await context.params; // 👈 Add await here
+    
+    // Delete employee
+    const deleteQuery = `DELETE FROM employees WHERE id = ?`;
+    await executeQuery({ query: deleteQuery, values: [id] });
+    
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error("Failed to delete employee:", error);
+    return NextResponse.json(
+      { error: "Failed to delete employee" },
       { status: 500 }
     );
   }

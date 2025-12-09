@@ -70,6 +70,7 @@ export default function EmployeesManagementPage() {
     
     // Actions
     handleEmployeeSubmit,
+    deleteEmployee,
     openEmployeeForm,
     resetFilters,
     refreshEmployees,
@@ -150,6 +151,7 @@ export default function EmployeesManagementPage() {
         pagination={pagination}
         setPagination={setPagination}
         onEdit={openEmployeeForm}
+        onDelete={deleteEmployee}
         loading={loading}
       />
     );

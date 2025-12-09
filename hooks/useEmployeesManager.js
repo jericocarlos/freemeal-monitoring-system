@@ -171,6 +171,47 @@ export const useEmployeesManager = () => {
   }, [currentEmployee, fetchEmployees, enqueueSnackbar]);
 
   /**
+   * Deletes an employee
+   * @param {Object} employee - Employee to delete
+   */
+  const deleteEmployee = useCallback(async (employee) => {
+    if (!employee?.id) {
+      enqueueSnackbar('Employee ID is required for deletion', { variant: 'error' });
+      return;
+    }
+
+    try {
+      setSubmitting(true);
+      setError(null);
+
+      const response = await fetch(`/api/admin/employees/${employee.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to delete employee');
+      }
+
+      // Refresh data
+      await fetchEmployees();
+      
+      enqueueSnackbar('Employee deleted successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to delete employee', { 
+        variant: 'error' 
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  }, [fetchEmployees, enqueueSnackbar]);
+
+  /**
    * Opens the employee form dialog
    * @param {Object|null} employee - Employee to edit, or null for new employee
    */
@@ -237,6 +278,7 @@ export const useEmployeesManager = () => {
     
     // Actions
     handleEmployeeSubmit,
+    deleteEmployee,
     openEmployeeForm,
     resetFilters,
     refreshEmployees,

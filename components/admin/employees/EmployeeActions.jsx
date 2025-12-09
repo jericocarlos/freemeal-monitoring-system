@@ -4,7 +4,7 @@
  */
 
 import React, { memo } from 'react';
-import { FiPlus, FiDownload, FiUpload } from 'react-icons/fi';
+import { FiUserPlus, FiDownload, FiUpload } from 'react-icons/fi';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -39,7 +39,7 @@ const EmployeeActions = memo(({
         aria-label="Add new employee"
         className="bg-primary hover:bg-primary/90"
       >
-        <FiPlus className="mr-2 h-4 w-4" />
+        <FiUserPlus className="mr-2 h-4 w-4" />
         Add Employee
       </Button>
     </div>
