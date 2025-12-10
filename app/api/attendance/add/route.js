@@ -22,7 +22,8 @@ export async function POST(request) {
                     p.name AS position,
                     e.photo,
                     e.status,
-                    'employee' AS person_type
+                    'employee' AS person_type,
+                    e.meal_count
                 FROM employees e
                 LEFT JOIN departments d ON e.department_id = d.id
                 LEFT JOIN positions p ON e.position_id = p.id
@@ -38,7 +39,8 @@ export async function POST(request) {
                     p.name AS position,
                     i.photo,
                     i.status,
-                    'intern' AS person_type
+                    'intern' AS person_type,
+                    null as meal_count
                 FROM interns i
                 LEFT JOIN departments d ON i.department_id = d.id
                 LEFT JOIN positions p ON i.position_id = p.id
@@ -54,7 +56,8 @@ export async function POST(request) {
                     p.name AS position,
                     t.photo,
                     t.status,
-                    'trainee' AS person_type
+                    'trainee' AS person_type,
+                    null as meal_count
                 FROM trainees t
                 LEFT JOIN departments d ON t.department_id = d.id
                 LEFT JOIN positions p ON t.position_id = p.id
@@ -103,10 +106,10 @@ export async function POST(request) {
       // No log today → allow claim for today
       nextLogType = "CLAIMED";
       insertLogQuery = `
-        INSERT INTO freemeal_logs (date_claimed, ashima_id, log_type, time_claimed)
-        VALUES (CURDATE(), ?, 'CLAIMED', NOW())
+        INSERT INTO freemeal_logs (date_claimed, ashima_id, log_type, time_claimed,meal_type)
+        VALUES (CURDATE(), ?, 'CLAIMED', NOW(), ?)
       `;
-      insertLogValues = [employee.ashima_id];
+      insertLogValues = [employee.ashima_id, employee.person_type]; // Add appropriate meal_type value here
 
       console.log("✅ Free meal claimed for today.");
 
@@ -133,22 +136,22 @@ export async function POST(request) {
       await executeQuery({ query: insertLogQuery, values: insertLogValues });
     }
 
-    // Update status/last_active as before
-    // if (employee.status === 'inactive') {
-    //   const updateStatusQuery = `
-    //     UPDATE employees
-    //     SET status = 'active', last_active = NOW()
-    //     WHERE ashima_id = ?
-    //   `;
-    //   await executeQuery({ query: updateStatusQuery, values: [employee.ashima_id] });
-    // } else {
-    //   const updateLastActiveQuery = `
-    //     UPDATE employees
-    //     SET last_active = NOW()
-    //     WHERE ashima_id = ?
-    //   `;
-    //   await executeQuery({ query: updateLastActiveQuery, values: [employee.ashima_id] });
-    // }
+    // Update meal count
+    if (employee.person_type === 'employee' && nextLogType === 'CLAIMED' && employee.meal_count > 0) {
+      const updateMealCountQuery = `
+        UPDATE employees
+        SET meal_count = meal_count - 1, last_active = NOW()
+        WHERE ashima_id = ?
+      `;
+      await executeQuery({ query: updateMealCountQuery, values: [employee.ashima_id] });
+    } else {
+      const updateLastActiveQuery = `
+        UPDATE employees
+        SET last_active = NOW()
+        WHERE ashima_id = ?
+      `;
+      await executeQuery({ query: updateLastActiveQuery, values: [employee.ashima_id] });
+    }
 
     // Return the latest attendance entry for this user
     const mergedLogsQuery = `

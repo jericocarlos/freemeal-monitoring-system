@@ -12,7 +12,7 @@ export async function GET(req) {
     const offset = (page - 1) * limit;
     const search = searchParams.get('search') || '';
     const logType = searchParams.get('log_type') || 'ALL';
-    const department = searchParams.get('department') || ''; // Add department filter
+    const position = searchParams.get('position') || ''; // Add position filter
     const startDate = searchParams.get('start_date') || '';
     const endDate = searchParams.get('end_date') || '';
 
@@ -25,18 +25,11 @@ export async function GET(req) {
       conditions.push("(l.ashima_id LIKE ? OR e.name LIKE ?)");
       values.push(`%${search}%`, `%${search}%`);
     }
-
-    // Add log type filter
-    // if (logType === 'IN') {
-    //   conditions.push("l.out_time IS NULL");
-    // } else if (logType === 'OUT') {
-    //   conditions.push("l.out_time IS NOT NULL");
-    // }
     
     // Add position filter
-    if (department) {
-      conditions.push("e.department_id = ?");
-      values.push(department);
+    if (position) {
+      conditions.push("e.position_id = ?");
+      values.push(position);
     }
 
     // Add date range filters
@@ -60,18 +53,59 @@ export async function GET(req) {
 
     // Query to fetch logs with pagination
     const query = `
-      SELECT
-        l.id, l.date_claimed, l.ashima_id, e.name, e.position_id,
-        p.name AS position, l.log_type,
-        l.time_claimed
-      FROM
-        freemeal_logs l
-      LEFT JOIN
-        employees e ON e.ashima_id = l.ashima_id
-      LEFT JOIN
-        positions p ON e.position_id = p.id
+        (
+          SELECT 
+            l.id, 
+            l.date_claimed,
+            e.ashima_id,
+            e.rfid_tag, 
+            e.name, 
+            p.name AS position, 
+            l.log_type, 
+            l.time_claimed, 
+            'employee' AS person_type
+          FROM freemeal_logs l
+          JOIN employees e ON l.ashima_id = e.ashima_id
+          LEFT JOIN positions p ON e.position_id = p.id
+        )
+
+        UNION ALL
+
+        (
+          SELECT 
+            l.id, 
+            l.date_claimed,
+            i.id_number AS ashimia_id,
+            i.rfid_tag, 
+            i.name, 
+            p.name AS position, 
+            l.log_type, 
+            l.time_claimed, 
+            'intern' AS person_type
+          FROM freemeal_logs l
+          JOIN interns i ON l.ashima_id = i.id_number
+          LEFT JOIN positions p ON i.position_id = p.id
+        )
+
+        UNION ALL
+
+        (
+          SELECT 
+            l.id, 
+            l.date_claimed,
+            t.ashima_id,
+            t.rfid_tag, 
+            t.name, 
+            p.name AS position, 
+            l.log_type, 
+            l.time_claimed, 
+            'trainee' AS person_type
+          FROM freemeal_logs l
+          JOIN trainees t ON l.ashima_id = t.ashima_id
+          LEFT JOIN positions p ON t.position_id = p.id
+        )
       ${whereClause}
-      ORDER BY l.time_claimed DESC
+      ORDER BY time_claimed DESC
       LIMIT ? OFFSET ?
     `;
 

@@ -110,7 +110,7 @@ export default function FreemealStates({
         <p className="text-muted-foreground mb-6 max-w-md">
           {hasFiltersOrSearch
             ? "No free meal logs match your current search criteria or filters. Try adjusting your search terms or removing some filters."
-            : "There are no free meal logs to display. Logs will appear here once employees start recording their free meal claims."
+            : "There are no free meal logs to display."
           }
         </p>
 

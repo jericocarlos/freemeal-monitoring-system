@@ -11,7 +11,7 @@ export async function GET(request) {
      (
   SELECT 
     al.id, 
-    e.rfid_tag, 
+    e.ashima_id, 
     e.name, 
     d.name AS department, 
     p.name AS position, 
@@ -29,7 +29,7 @@ UNION ALL
 (
   SELECT 
     al.id, 
-    i.rfid_tag, 
+    i.id_number as ashima_id, 
     i.name, 
     d.name AS department, 
     p.name AS position, 
@@ -47,7 +47,7 @@ UNION ALL
 (
   SELECT 
     al.id, 
-    t.rfid_tag, 
+    t.ashima_id, 
     t.name, 
     d.name AS department, 
     p.name AS position, 

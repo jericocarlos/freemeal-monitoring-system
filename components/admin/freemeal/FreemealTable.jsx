@@ -111,16 +111,23 @@ export default function FreemealTable({
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
-                aria-label="Employee ASHIMA ID"
+                aria-label="Free meal date"
               >
-                ASHIMA ID
+                Date
+              </TableHead>
+              <TableHead 
+                scope="col"
+                className="whitespace-nowrap"
+                aria-label="Employee Ashima ID"
+              >
+                Ashima ID
               </TableHead>
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
                 aria-label="Employee full name"
               >
-                Employee Name
+                Name
               </TableHead>
               <TableHead 
                 scope="col"
@@ -129,13 +136,7 @@ export default function FreemealTable({
               >
                 Position
               </TableHead>
-              <TableHead 
-                scope="col"
-                className="whitespace-nowrap"
-                aria-label="Free meal date"
-              >
-                Date
-              </TableHead>
+              
               <TableHead 
                 scope="col"
                 className="whitespace-nowrap"
@@ -167,6 +168,9 @@ export default function FreemealTable({
                   key={log.id}
                   className="hover:bg-muted/50"
                 >
+                   <TableCell>
+                    {formatDate(log.date_claimed)}
+                  </TableCell>
                   <TableCell className="font-mono">
                     {log.ashima_id || "N/A"}
                   </TableCell>
@@ -176,9 +180,6 @@ export default function FreemealTable({
                   <TableCell>
                     {log.position || "N/A"}
                   </TableCell>
-                  <TableCell>
-                    {formatDate(log.date_claimed)}
-                  </TableCell>
                   <TableCell className="text-green-600 font-medium">
                     <time 
                       dateTime={log.in_time}
@@ -187,14 +188,6 @@ export default function FreemealTable({
                       {formatDateTime(log.time_claimed)}
                     </time>
                   </TableCell>
-                  {/* <TableCell className="text-red-600 font-medium">
-                    <time 
-                      dateTime={log.out_time}
-                      title={`Time out: ${formatDateTime(log.out_time)}`}
-                    >
-                      {formatDateTime(log.out_time)}
-                    </time>
-                  </TableCell> */}
                 </TableRow>
               ))
             ) : (

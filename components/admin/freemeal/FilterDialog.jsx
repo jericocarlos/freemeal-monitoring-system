@@ -104,7 +104,7 @@ export default function FilterDialog({
             </div> */}
 
             {/* Department Filter */}
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
               <Controller
                 name="department"
@@ -135,7 +135,7 @@ export default function FilterDialog({
                   </Select>
                 )}
               />
-            </div>
+            </div> */}
 
             {/* Date Range Picker */}
             <div className="space-y-2">
