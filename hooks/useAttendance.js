@@ -11,6 +11,7 @@ export default function useAttendance() {
   const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);
   const [loading, setLoading] = useState(false); // <-- Add loading state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [playSuccess] = useSound('/sounds/success.mp3');
   const [playError] = useSound('/sounds/error.mp3');

@@ -7,6 +7,7 @@ import EmployeeCard from '@/components/layout/home/EmployeeCard';
 import EmployeePhoto from '@/components/layout/home/EmployeePhoto';
 import ErrorDisplay from '@/components/layout/home/ErrorDisplay';
 import useAttendance from '@/hooks/useAttendance';
+import useF2Shortcut  from '@/hooks/useF2Shortcut';
 import { ANIMATIONS } from '@/constants';
 import Image from 'next/image';
 
@@ -21,6 +22,8 @@ export default function Home() {
     clearEmployeeInfo,
     loading // <-- Destructure loading
   } = useAttendance();
+
+  useF2Shortcut(() => alert("F2 pressed!"));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 to-slate-900 text-white overflow-hidden">
@@ -51,7 +54,7 @@ export default function Home() {
                 animate={{ opacity: [0.6, 1, 0.6] }}
                 transition={{ repeat: Infinity, duration: 2 }}
               >
-                Please Tap Your ID Card In Claiming Your Free Meal
+                Please Tap Your ID Card In Claiming Your Free Meal.
               </motion.h2>
             </motion.div>
           )}
