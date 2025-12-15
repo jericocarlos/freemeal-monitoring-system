@@ -55,6 +55,7 @@ export default function Home() {
                 transition={{ repeat: Infinity, duration: 2 }}
               >
                 Please Tap Your ID Card In Claiming Your Free Meal.
+                <p style={{ fontWeight: "semibold" }}>Note: For Manual Date Input press F2.</p>
               </motion.h2>
             </motion.div>
           )}
