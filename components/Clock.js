@@ -4,16 +4,33 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import dayjs from 'dayjs';
 
-export default function Clock() {
+export default function Clock({ overrideDate = null }) {
   const [dateTime, setDateTime] = useState(null);
 
-  useEffect(() => {
-    // Set the initial time and start the interval to update every second
-    setDateTime(new Date());
-    const timer = setInterval(() => setDateTime(new Date()), 1000);
+  // Helper to parse various date strings into a Date instance
+  const parseDateString = (s) => {
+    if (!s) return new Date();
+    try {
+      // Support 'YYYY-MM-DD HH:mm:ss' or 'YYYY-MM-DDTHH:mm' formats
+      const iso = s.includes('T') ? s : s.replace(' ', 'T');
+      return new Date(iso);
+    } catch {
+      return new Date(s);
+    }
+  };
 
-    return () => clearInterval(timer); // Cleanup interval on component unmount
-  }, []);
+  useEffect(() => {
+    // Initialize based on override (if present), otherwise use system time.
+    const initial = overrideDate ? parseDateString(overrideDate) : new Date();
+    setDateTime(initial);
+
+    // Use an incremental tick so clock continues to advance from the override
+    const timer = setInterval(() => {
+      setDateTime((prev) => new Date(prev.getTime() + 1000));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [overrideDate]);
 
   if (!dateTime) {
     // Show nothing or a placeholder until the client renders

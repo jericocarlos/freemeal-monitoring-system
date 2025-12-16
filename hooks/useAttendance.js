@@ -11,7 +11,7 @@ export default function useAttendance() {
   const [error, setError] = useState(null);
   const [showInstructions, setShowInstructions] = useState(true);
   const [loading, setLoading] = useState(false); // <-- Add loading state
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [manualDateOverride, setManualDateOverride] = useState(null);
 
   const [playSuccess] = useSound('/sounds/success.mp3');
   const [playError] = useSound('/sounds/error.mp3');
@@ -41,10 +41,13 @@ export default function useAttendance() {
     setError(null);
 
     try {
+      // include manual date override (if set) when processing tag reads
+      const payload = { rfid_tag: tag };
+      if (manualDateOverride) payload.time_claimed = manualDateOverride;
       const response = await fetch(API.ADD_ATTENDANCE, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ rfid_tag: tag }),
+        body: JSON.stringify(payload),
       });
       const result = await response.json();
 
@@ -68,6 +71,56 @@ export default function useAttendance() {
     }
   }, [clearEmployeeInfo, playSuccess, playError]);
 
+  // Submit a manual date/time for the currently selected employee.
+  // If no employee is selected, set a persistent override for subsequent scans.
+  const submitManualDate = useCallback(async (manualDate) => {
+    if (!employeeInfo) {
+      // Set persistent override (can be null to clear)
+      setManualDateOverride(manualDate || null);
+      setEmployeeStatus('Manual date override set');
+      return { logType: 'OVERRIDE_SET', time_claimed: manualDate || null };
+    }
+
+    setLoading(true);
+    setError(null);
+    setEmployeeStatus('Processing...');
+
+    try {
+      const payload = {
+        ashima_id: employeeInfo.ashima_id,
+        time_claimed: manualDate || null
+      };
+
+      const response = await fetch(API.ADD_ATTENDANCE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setEmployeeInfo(result.employee);
+        setAttendanceLog(result.attendanceLog);
+        setEmployeeStatus(result.logType === 'CLAIMED' && result.flag !== 1 ? STATUS.CLAIMED : STATUS.CLAIMED_ALREADY);
+        playSuccess();
+        return result;
+      } else {
+        setError(result.error || 'An unexpected error occurred.');
+        playError();
+        throw new Error(result.error || 'Failed to submit manual date.');
+      }
+    } catch (err) {
+      setError(err.message || 'An unexpected error occurred while submitting manual date.');
+      playError();
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [employeeInfo, playSuccess, playError]);
+
+  const clearManualDateOverride = useCallback(() => setManualDateOverride(null), []);
+
   return {
     employeeInfo,
     attendanceLog,
@@ -76,6 +129,9 @@ export default function useAttendance() {
     showInstructions,
     handleTagRead,
     clearEmployeeInfo,
-    loading // <-- Return loading
+    loading, // <-- Return loading
+    submitManualDate,
+    manualDateOverride,
+    clearManualDateOverride
   };
 }

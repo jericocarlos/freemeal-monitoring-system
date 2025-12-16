@@ -7,7 +7,17 @@ import EmployeeCard from '@/components/layout/home/EmployeeCard';
 import EmployeePhoto from '@/components/layout/home/EmployeePhoto';
 import ErrorDisplay from '@/components/layout/home/ErrorDisplay';
 import useAttendance from '@/hooks/useAttendance';
+import { useState } from 'react';
 import useF2Shortcut  from '@/hooks/useF2Shortcut';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle,
+  DialogDescription
+} from '@/components/ui/dialog';
+import { useToast } from '@/components/ui/toast';
 import { ANIMATIONS } from '@/constants';
 import Image from 'next/image';
 
@@ -20,10 +30,31 @@ export default function Home() {
     showInstructions,
     handleTagRead,
     clearEmployeeInfo,
-    loading // <-- Destructure loading
+    loading, // <-- Destructure loading
+    submitManualDate,
+    manualDateOverride,
   } = useAttendance();
 
-  useF2Shortcut(() => alert("F2 pressed!"));
+  const [isManualDateOpen, setIsManualDateOpen] = useState(false);
+  const [manualDate, setManualDate] = useState('');
+  const { ToastContainer, success, error: toastError } = useToast();
+  // Format helper for the override and display
+  const formatDateTime = (dateString) => {
+    if (!dateString) return '';
+    try {
+      const iso = dateString.includes('T') ? dateString : dateString.replace(' ', 'T');
+      return new Date(iso).toLocaleString('en-US', {
+        timeZone: 'Asia/Manila',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch (err) {
+      return dateString;
+    }
+  };
+
+  useF2Shortcut(() => setIsManualDateOpen(true));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-blue-900 to-slate-900 text-white overflow-hidden">
@@ -34,7 +65,7 @@ export default function Home() {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <Clock />
+        <Clock overrideDate={manualDateOverride} />
       </motion.div>
 
       {/* Conditional main content */}
@@ -55,7 +86,7 @@ export default function Home() {
                 transition={{ repeat: Infinity, duration: 2 }}
               >
                 Please Tap Your ID Card In Claiming Your Free Meal.
-                <p style={{ fontWeight: "semibold" }}>Note: For Manual Date Input press F2.</p>
+                <p style={{ fontWeight: "semibold" }}>Note: For Manual Date Change press F2.</p>
               </motion.h2>
             </motion.div>
           )}
@@ -102,6 +133,13 @@ export default function Home() {
             <span className="ml-6 text-3xl text-cyan-500 font-bold">Processing...</span>
           </div>
         )}
+
+        {/* Manual Date Override Display */}
+        {/* {manualDateOverride && (
+          <div className="ml-4 text-sm text-cyan-200">
+            Current date: {formatDateTime(manualDateOverride)}
+          </div>
+        )} */}
       </div>
 
       {/* Company branding footer */}
@@ -130,6 +168,67 @@ export default function Home() {
           </div>
         </div>
       </div>
+
+      {/* Toast container */}
+      <ToastContainer />
+
+      {/* Manual Date Modal */}
+      <Dialog open={isManualDateOpen} onOpenChange={setIsManualDateOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Manual Change Date Entry</DialogTitle>
+            <DialogDescription>
+              Enter a previous date for free meal claims.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-4">
+            <input
+              type="date"
+              value={manualDate}
+              onChange={(e) => setManualDate(e.target.value)}
+              className="w-full rounded border px-3 py-2 bg-slate-800 text-white"
+            />
+          </div>
+
+          <DialogFooter>
+            <button
+              type="button"
+              className="px-4 py-2 rounded bg-gray-200 text-black"
+              onClick={() => setIsManualDateOpen(false)}
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              className="ml-3 px-4 py-2 rounded bg-cyan-500 text-white"
+              onClick={async () => {
+                try {
+                  const payloadDate = manualDate ? manualDate.replace('T', ' ') : null;
+                  const result = await submitManualDate(payloadDate);
+
+                  if (result?.logType === 'OVERRIDE_SET') {
+                    if (payloadDate) {
+                      success(`Current date set: ${formatDateTime(payloadDate)}`);
+                    } else {
+                      success('Current date cleared');
+                    }
+                  } else {
+                    success(`Manual date saved — ${result.logType}`);
+                  }
+
+                  setIsManualDateOpen(false);
+                  setManualDate('');
+                } catch (err) {
+                  toastError(err.message || 'Failed to submit manual date.');
+                }
+              }}
+            >
+              Confirm
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* HID Listener */}
       <HIDListener onTagRead={handleTagRead} />
