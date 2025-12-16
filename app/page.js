@@ -177,12 +177,13 @@ export default function Home() {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Manual Change Date Entry</DialogTitle>
-            <DialogDescription>
-              Enter a previous date for free meal claims.
+            <DialogDescription className="text-red-500">
+              Note: When changing date it must be the previous date and not the future date.
             </DialogDescription>
           </DialogHeader>
 
           <div className="mt-4">
+            <label className="block mb-2 font-medium">Select Previous Date:</label>
             <input
               type="date"
               value={manualDate}

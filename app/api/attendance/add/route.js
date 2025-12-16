@@ -18,6 +18,9 @@ export async function POST(request) {
     const timeParamRaw = time_claimed ? String(time_claimed).replace('T', ' ') : null;
     const timeForQueries = timeParamRaw || new Date().toISOString().slice(0, 19).replace('T', ' ');
 
+    console.log("timeForQueries:", timeForQueries);
+    console.log("timeParamRaw:", timeParamRaw);
+
     // Find person by either rfid or id (employees/interns/trainees)
     const employeeQuery = `
       SELECT 
@@ -106,6 +109,8 @@ export async function POST(request) {
 
     const today = timeParamRaw ? new Date(timeParamRaw) : new Date();
     const claimedDate = new Date(latestLog?.time_claimed);
+
+    console.log("🕒 Processing free meal log for:", employee.name, "on", today.toDateString());
 
     const isSameDay = latestLog &&
       claimedDate.getDate() === today.getDate() &&
