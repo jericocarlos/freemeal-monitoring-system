@@ -21,28 +21,8 @@ export default function Clock({ overrideDate = null }) {
 
   useEffect(() => {
     // Initialize based on override (if present), otherwise use system time.
-    setDateTime((prev) => {
-      const initial = overrideDate ? parseDateString(overrideDate) : new Date();
-
-      if (!overrideDate) {
-        // No override — use system time
-        return initial;
-      }
-
-      // If the override contains an explicit time (e.g., includes ':' or 'T' with time),
-      // use it as-is. Otherwise treat it as a date-only override and preserve the
-      // current time (from prev state or now).
-      const hasTimePart = /T.*:|:/.test(overrideDate);
-
-      if (hasTimePart) {
-        return initial;
-      }
-
-      const combined = new Date(initial);
-      const source = prev || new Date();
-      combined.setHours(source.getHours(), source.getMinutes(), source.getSeconds(), source.getMilliseconds());
-      return combined;
-    });
+    const initial = overrideDate ? parseDateString(overrideDate) : new Date();
+    setDateTime(initial);
 
     // Use an incremental tick so clock continues to advance from the override
     const timer = setInterval(() => {

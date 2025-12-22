@@ -169,7 +169,7 @@ export default function Home() {
       <Dialog open={isManualDateOpen} onOpenChange={setIsManualDateOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Manual Change Date Entry</DialogTitle>
+            <DialogTitle>Manual Date Change</DialogTitle>
             <DialogDescription className="text-red-500">
               Note: When changing date it must be the previous date and not the future date.
             </DialogDescription>
@@ -178,6 +178,7 @@ export default function Home() {
           <div className="mt-4">
             <label className="block mb-2 font-medium">Select Previous Date:</label>
             <input
+              name="manualDate"
               type="date"
               value={manualDate}
               onChange={(e) => setManualDate(e.target.value)}

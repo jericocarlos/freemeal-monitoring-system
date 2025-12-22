@@ -14,14 +14,16 @@ export async function POST(request) {
       );
     }
 
-    console.log("Received request with:", { rfid_tag, ashima_id, time_claimed });
+    // Normalize incoming fields and log for clarity (show null instead of undefined)
+    console.log("Received request with:", {
+      rfid_tag: rfid_tag ?? null,
+      ashima_id: ashima_id ?? null,
+      time_claimed: time_claimed ?? null
+    });
 
     // Normalize time_claimed if provided
     const timeParamRaw = time_claimed ? String(time_claimed).replace('T', ' ') : null;
     const timeForQueries = timeParamRaw || new Date().toISOString().slice(0, 19).replace('T', ' ');
-
-    console.log("timeForQueries:", timeForQueries);
-    console.log("timeParamRaw:", timeParamRaw);
 
     // Find person by either rfid or id (employees/interns/trainees)
     const employeeQuery = `

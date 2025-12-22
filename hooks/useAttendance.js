@@ -74,11 +74,30 @@ export default function useAttendance() {
   // Submit a manual date/time for the currently selected employee.
   // If no employee is selected, set a persistent override for subsequent scans.
   const submitManualDate = useCallback(async (manualDate) => {
+    // Helper to combine a date-only string with a time source (preserve time)
+    const combineDateWithTime = (dateOnlyStr, source) => {
+      const datePart = dateOnlyStr.includes('T') ? dateOnlyStr.split('T')[0] : dateOnlyStr.split(' ')[0];
+      const src = source ? new Date(source) : new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${datePart} ${pad(src.getHours())}:${pad(src.getMinutes())}:${pad(src.getSeconds())}`;
+    };
+
+    // If no employee selected, set a persistent override (store full timestamp if possible)
     if (!employeeInfo) {
-      // Set persistent override (can be null to clear)
-      setManualDateOverride(manualDate || null);
+      let timeClaimed = null;
+      if (manualDate) {
+        const hasTime = /T.*:|:/.test(manualDate);
+        if (hasTime) {
+          timeClaimed = manualDate.replace('T', ' ');
+        } else {
+          const source = manualDateOverride || new Date().toISOString();
+          timeClaimed = combineDateWithTime(manualDate, source);
+        }
+      }
+
+      setManualDateOverride(timeClaimed || null);
       setEmployeeStatus('Manual date override set');
-      return { logType: 'OVERRIDE_SET', time_claimed: manualDate || null };
+      return { logType: 'OVERRIDE_SET', time_claimed: timeClaimed || null };
     }
 
     setLoading(true);
@@ -86,9 +105,21 @@ export default function useAttendance() {
     setEmployeeStatus('Processing...');
 
     try {
+      // Build the payload time_claimed value — combine date-only with preserved time if needed
+      let timeClaimed = null;
+      if (manualDate) {
+        const hasTime = /T.*:|:/.test(manualDate);
+        if (hasTime) {
+          timeClaimed = manualDate.replace('T', ' ');
+        } else {
+          const source = manualDateOverride || new Date().toISOString();
+          timeClaimed = combineDateWithTime(manualDate, source);
+        }
+      }
+
       const payload = {
         ashima_id: employeeInfo.ashima_id,
-        time_claimed: manualDate || null
+        time_claimed: timeClaimed || null
       };
 
       const response = await fetch(API.ADD_ATTENDANCE, {
@@ -117,7 +148,7 @@ export default function useAttendance() {
     } finally {
       setLoading(false);
     }
-  }, [employeeInfo, playSuccess, playError]);
+  }, [employeeInfo, playSuccess, playError, manualDateOverride]);
 
   const clearManualDateOverride = useCallback(() => setManualDateOverride(null), []);
 
