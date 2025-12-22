@@ -133,13 +133,6 @@ export default function Home() {
             <span className="ml-6 text-3xl text-cyan-500 font-bold">Processing...</span>
           </div>
         )}
-
-        {/* Manual Date Override Display */}
-        {/* {manualDateOverride && (
-          <div className="ml-4 text-sm text-cyan-200">
-            Current date: {formatDateTime(manualDateOverride)}
-          </div>
-        )} */}
       </div>
 
       {/* Company branding footer */}

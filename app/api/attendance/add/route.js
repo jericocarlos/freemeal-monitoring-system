@@ -14,6 +14,8 @@ export async function POST(request) {
       );
     }
 
+    console.log("Received request with:", { rfid_tag, ashima_id, time_claimed });
+
     // Normalize time_claimed if provided
     const timeParamRaw = time_claimed ? String(time_claimed).replace('T', ' ') : null;
     const timeForQueries = timeParamRaw || new Date().toISOString().slice(0, 19).replace('T', ' ');
@@ -150,9 +152,9 @@ export async function POST(request) {
     }
 
     // Insert if needed
-    if (insertLogQuery) {
-      await executeQuery({ query: insertLogQuery, values: insertLogValues });
-    }
+    // if (insertLogQuery) {
+    //   await executeQuery({ query: insertLogQuery, values: insertLogValues });
+    // }
 
     // Update meal_count or last_active as before
     if (employee.person_type === 'employee' && nextLogType === 'CLAIMED' && employee.meal_count > 0) {
