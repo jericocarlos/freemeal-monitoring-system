@@ -168,7 +168,13 @@ export async function POST(request) {
         WHERE ashima_id = ?
       `;
       await executeQuery({ query: updateMealCountQuery, values: [employee.ashima_id] });
-    } else {
+    }else if (employee.person_type === 'employee' && employee.meal_count == 0) {
+      // throw error if meal_count is zero
+      return NextResponse.json(
+        { error: 'Your free meal count reached its limit. Wait for your meal count to be refreshed.' },
+        { status: 400 }
+      );
+    }else {
       const updateLastActiveQuery = `
         UPDATE employees
         SET last_active = NOW()
