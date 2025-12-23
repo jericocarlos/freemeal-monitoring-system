@@ -46,6 +46,17 @@ export default function useAttendance() {
 
     // If no employee selected, set a persistent override (store full timestamp if possible)
     if (!employeeInfo) {
+      // Validate against future dates
+      if (manualDate) {
+        const [y, m, d] = manualDate.split('-').map(Number);
+        const selected = new Date(y, m - 1, d);
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        if (selected > today) {
+          throw new Error('Selected date cannot be in the future.');
+        }
+      }
+
       let timeClaimed = null;
       if (manualDate) {
         const hasTime = /T.*:|:/.test(manualDate);
@@ -67,6 +78,17 @@ export default function useAttendance() {
     setEmployeeStatus('Processing...');
 
     try {
+      // Validate against future dates
+      if (manualDate) {
+        const [y, m, d] = manualDate.split('-').map(Number);
+        const selected = new Date(y, m - 1, d);
+        const now = new Date();
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        if (selected > today) {
+          throw new Error('Selected date cannot be in the future.');
+        }
+      }
+
       // Build the payload time_claimed value — combine date-only with preserved time if needed
       let timeClaimed = null;
       if (manualDate) {
