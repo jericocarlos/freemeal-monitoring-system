@@ -171,7 +171,7 @@ export async function POST(request) {
     }else if (employee.person_type === 'employee' && employee.meal_count == 0) {
       // throw error if meal_count is zero
       return NextResponse.json(
-        { error: 'Your free meal count reached its limit. Wait for your meal count to be refreshed.' },
+        { error: 'Your free meal reached its limit. Wait for your free meal to be refreshed.' },
         { status: 400 }
       );
     }else {
