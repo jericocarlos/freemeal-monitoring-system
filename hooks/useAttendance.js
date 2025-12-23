@@ -33,44 +33,6 @@ export default function useAttendance() {
     setLoading(false); // <-- Reset loading on clear
   }, []);
 
-  const handleTagRead = useCallback(async (tag) => {
-    setLoading(true); // <-- Set loading true at start
-    setEmployeeInfo({ name: 'Processing...', photo: null });
-    setAttendanceLog(null);
-    setEmployeeStatus('Processing...');
-    setError(null);
-
-    try {
-      // include manual date override (if set) when processing tag reads
-      const payload = { rfid_tag: tag };
-      if (manualDateOverride) payload.time_claimed = manualDateOverride;
-      const response = await fetch(API.ADD_ATTENDANCE, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      const result = await response.json();
-
-      if (response.ok) {
-        setEmployeeInfo(result.employee);
-        setAttendanceLog(result.attendanceLog);
-        setEmployeeStatus(result.logType === 'CLAIMED' && result.flag !== 1 ? STATUS.CLAIMED : STATUS.CLAIMED_ALREADY);
-        setError(null);
-        playSuccess();
-      } else {
-        setError(result.error || 'An unexpected error occurred.');
-        clearEmployeeInfo();
-        playError();
-      }
-    } catch (err) {
-      setError('An unexpected error occurred while processing the RFID tag.');
-      clearEmployeeInfo();
-      playError();
-    } finally {
-      setLoading(false); // <-- Always reset loading
-    }
-  }, [clearEmployeeInfo, playSuccess, playError]);
-
   // Submit a manual date/time for the currently selected employee.
   // If no employee is selected, set a persistent override for subsequent scans.
   const submitManualDate = useCallback(async (manualDate) => {
@@ -152,17 +114,57 @@ export default function useAttendance() {
 
   const clearManualDateOverride = useCallback(() => setManualDateOverride(null), []);
 
+  const handleTagRead = useCallback(async (tag) => {
+    setLoading(true); // <-- Set loading true at start
+    setEmployeeInfo({ name: 'Processing...', photo: null });
+    setAttendanceLog(null);
+    setEmployeeStatus('Processing...');
+    setError(null);
+
+    try {
+      // include manual date override (if set) when processing tag reads
+      const payload = { rfid_tag: tag};
+      if (manualDateOverride) payload.time_claimed = manualDateOverride;
+      const response = await fetch(API.ADD_ATTENDANCE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json();
+
+      if (response.ok) {
+        setEmployeeInfo(result.employee);
+        setAttendanceLog(result.attendanceLog);
+        setEmployeeStatus(result.logType === 'CLAIMED' && result.flag !== 1 ? STATUS.CLAIMED : STATUS.CLAIMED_ALREADY);
+        setError(null);
+        playSuccess();
+      } else {
+        setError(result.error || 'An unexpected error occurred.');
+        clearEmployeeInfo();
+        playError();
+      }
+    } catch (err) {
+      setError('An unexpected error occurred while processing the RFID tag.');
+      clearEmployeeInfo();
+      playError();
+    } finally {
+      setLoading(false); // <-- Always reset loading
+    }
+  }, [clearEmployeeInfo, playSuccess, playError, manualDateOverride]);
+
+ 
+
   return {
     employeeInfo,
     attendanceLog,
     employeeStatus,
     error,
     showInstructions,
-    handleTagRead,
-    clearEmployeeInfo,
-    loading, // <-- Return loading
     submitManualDate,
     manualDateOverride,
-    clearManualDateOverride
+    clearManualDateOverride,
+    handleTagRead,
+    clearEmployeeInfo,
+    loading // <-- Return loading
   };
 }

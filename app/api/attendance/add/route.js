@@ -5,6 +5,8 @@ export async function POST(request) {
   try {
     const { rfid_tag, ashima_id, time_claimed } = await request.json();
 
+    console.log("📥 Received POST /api/attendance/add with data:", { rfid_tag, ashima_id, time_claimed });
+
     // Allow searching by either RFID tag or ashima_id
     const searchParam = ashima_id ?? rfid_tag;
     if (!searchParam) {
@@ -154,9 +156,9 @@ export async function POST(request) {
     }
 
     // Insert if needed
-    // if (insertLogQuery) {
-    //   await executeQuery({ query: insertLogQuery, values: insertLogValues });
-    // }
+    if (insertLogQuery) {
+      await executeQuery({ query: insertLogQuery, values: insertLogValues });
+    }
 
     // Update meal_count or last_active as before
     if (employee.person_type === 'employee' && nextLogType === 'CLAIMED' && employee.meal_count > 0) {
