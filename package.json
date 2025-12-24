@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "generate-weekly-report": "node scripts/generate-weekly-report.js",
+    "weekly-cron": "node scripts/weekly-cron.js"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -41,6 +43,7 @@
     "next-auth": "^4.24.11",
     "node-cron": "^4.2.1",
     "nodemailer": "^7.0.12",
+    "node-fetch": "^3.4.0",
     "notistack": "^3.0.2",
     "react": "^19.1.0",
     "react-countup": "^6.5.3",

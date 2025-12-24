@@ -68,7 +68,7 @@ LIMIT ? OFFSET ?;
 
     return NextResponse.json({ logs });
   } catch (error) {
-    console.error('Error fetching attendance logs:', error);
+    console.error('Error fetching free meal logs:', error);
     return NextResponse.json(
       { error: 'Failed to fetch attendance logs.' },
       { status: 500 }

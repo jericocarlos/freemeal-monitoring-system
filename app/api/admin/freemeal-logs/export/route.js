@@ -15,92 +15,94 @@ export async function GET(req) {
     let conditions = [];
     const values = [];
 
-    // Add search condition
+    // Add search condition (matched against the combined result set)
     if (search) {
-      conditions.push("(l.ashima_id LIKE ? OR e.name LIKE ?)");
+      conditions.push("(ashima_id LIKE ? OR name LIKE ?)");
       values.push(`%${search}%`, `%${search}%`);
     }
 
-    // Add log type filter
+    // Add log type filter (left as future extension)
     // if (logType === 'IN') {
-    //   conditions.push("l.out_time IS NULL");
+    //   conditions.push("out_time IS NULL");
     // } else if (logType === 'OUT') {
-    //   conditions.push("l.out_time IS NOT NULL");
+    //   conditions.push("out_time IS NOT NULL");
     // }
 
-    // Add date range filters
+    // Add date range filters (operate on time_claimed column)
     if (startDate) {
-      conditions.push("DATE(l.time_claimed) >= ?");
+      conditions.push("DATE(time_claimed) >= ?");
       values.push(startDate);
     }
 
     if (endDate) {
-      conditions.push("DATE(l.time_claimed) <= ?");
+      conditions.push("DATE(time_claimed) <= ?");
       values.push(endDate);
     }
 
-    // Combine conditions
+    // Combine conditions (operate on the combined result set)
     const whereClause = conditions.length > 0 
       ? "WHERE " + conditions.join(" AND ") 
       : "";
 
-    // Query to fetch logs for export
+    // Query to fetch logs for export (apply filters to combined set)
     const query = `
-      (
-        SELECT 
-          al.id, 
-          e.ashima_id, 
-          e.name, 
-          d.name AS department, 
-          p.name AS position, 
-          al.log_type,
-          al.date_claimed,
-          al.time_claimed, 
-          'employee' AS person_type
-        FROM freemeal_logs al
-        JOIN employees e ON al.ashima_id = e.ashima_id
-        LEFT JOIN departments d ON e.department_id = d.id
-        LEFT JOIN positions p ON e.position_id = p.id
-      )
+      SELECT * FROM (
+        (
+          SELECT 
+            al.id, 
+            e.ashima_id, 
+            e.name, 
+            d.name AS department, 
+            p.name AS position, 
+            al.log_type,
+            al.date_claimed,
+            al.time_claimed, 
+            'employee' AS person_type
+          FROM freemeal_logs al
+          JOIN employees e ON al.ashima_id = e.ashima_id
+          LEFT JOIN departments d ON e.department_id = d.id
+          LEFT JOIN positions p ON e.position_id = p.id
+        )
 
-      UNION ALL
+        UNION ALL
 
-      (
-        SELECT 
-          al.id, 
-          i.id_number as ashima_id, 
-          i.name, 
-          d.name AS department, 
-          p.name AS position, 
-          al.log_type,
-          al.date_claimed,
-          al.time_claimed, 
-          'intern' AS person_type
-        FROM freemeal_logs al
-        JOIN interns i ON al.ashima_id = i.id_number
-        LEFT JOIN departments d ON i.department_id = d.id
-        LEFT JOIN positions p ON i.position_id = p.id
-      )
+        (
+          SELECT 
+            al.id, 
+            i.id_number as ashima_id, 
+            i.name, 
+            d.name AS department, 
+            p.name AS position, 
+            al.log_type,
+            al.date_claimed,
+            al.time_claimed, 
+            'intern' AS person_type
+          FROM freemeal_logs al
+          JOIN interns i ON al.ashima_id = i.id_number
+          LEFT JOIN departments d ON i.department_id = d.id
+          LEFT JOIN positions p ON i.position_id = p.id
+        )
 
-      UNION ALL
+        UNION ALL
 
-      (
-        SELECT 
-          al.id, 
-          t.ashima_id, 
-          t.name, 
-          d.name AS department, 
-          p.name AS position, 
-          al.log_type,
-          al.date_claimed,
-          al.time_claimed, 
-          'trainee' AS person_type
-        FROM freemeal_logs al
-        JOIN trainees t ON al.ashima_id = t.ashima_id
-        LEFT JOIN departments d ON t.department_id = d.id
-        LEFT JOIN positions p ON t.position_id = p.id
-      )
-
+        (
+          SELECT 
+            al.id, 
+            t.ashima_id, 
+            t.name, 
+            d.name AS department, 
+            p.name AS position, 
+            al.log_type,
+            al.date_claimed,
+            al.time_claimed, 
+            'trainee' AS person_type
+          FROM freemeal_logs al
+          JOIN trainees t ON al.ashima_id = t.ashima_id
+          LEFT JOIN departments d ON t.department_id = d.id
+          LEFT JOIN positions p ON t.position_id = p.id
+        )
+      ) AS combined
+      ${whereClause}
       ORDER BY time_claimed DESC
     `;
 
@@ -135,11 +137,14 @@ export async function GET(req) {
       csvContent += row.join(",") + "\n";
     });
 
+    // Prepare filename using the requested range if provided
+    const fileLabel = startDate || endDate ? `${startDate || 'start'}_to_${endDate || 'end'}` : new Date().toISOString().split('T')[0];
+
     // Return CSV as a downloadable file
     return new Response(csvContent, {
       headers: {
         "Content-Type": "text/csv",
-        "Content-Disposition": `attachment; filename="freemeal_logs_${new Date().toISOString().split('T')[0]}.csv"`
+        "Content-Disposition": `attachment; filename="freemeal_logs_${fileLabel}.csv"`
       }
     });
   } catch (error) {
