@@ -38,6 +38,7 @@ export const useFreemealLogsManager = () => {
   const [loading, setLoading] = useState(true);
   const [loadingDepartments, setLoadingDepartments] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [emailSending, setEmailSending] = useState(false);
   
   // Filter and search state
   const [searchQuery, setSearchQuery] = useState('');
@@ -204,6 +205,140 @@ export const useFreemealLogsManager = () => {
   }, [searchQuery, filters, enqueueSnackbar]);
 
   /**
+   * Sends Free Meal logs CSV to an email address
+   */
+  const handleSendLogsByEmail = useCallback(async () => {
+    try {
+      setEmailSending(true);
+      setError(null);
+
+      const to = window.prompt('Enter recipient email address');
+      if (!to) {
+        setEmailSending(false);
+        return;
+      }
+
+      const searchParams = new URLSearchParams({
+        page: 1,
+        limit: 10000,
+        search: searchQuery,
+        log_type: filters.logType || '',
+        department: filters.department || '',
+        start_date: filters.dateRange.from
+          ? filters.dateRange.from.toISOString().split('T')[0]
+          : '',
+        end_date: filters.dateRange.to
+          ? filters.dateRange.to.toISOString().split('T')[0]
+          : '',
+      });
+
+      const response = await fetch('/api/reports/freemeal/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to,
+          subject: `Free Meal Logs - ${new Date().toLocaleDateString()}`,
+          search: searchQuery,
+          log_type: filters.logType || '',
+          start_date: searchParams.get('start_date') || '',
+          end_date: searchParams.get('end_date') || ''
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to send report via email');
+      }
+
+      enqueueSnackbar('Free Meal logs emailed successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error sending logs via email:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to email logs', { variant: 'error' });
+    } finally {
+      setEmailSending(false);
+    }
+  }, [searchQuery, filters, enqueueSnackbar]);
+
+  /**
+   * Send previous week's free meal logs via email (Monday - Sunday)
+   */
+  const handleSendPreviousWeekByEmail = useCallback(async () => {
+    try {
+      setEmailSending(true);
+      setError(null);
+
+      const to = window.prompt('Enter recipient email address for previous week logs');
+      if (!to) {
+        setEmailSending(false);
+        return;
+      }
+
+      const response = await fetch('/api/reports/freemeal/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to,
+          subject: `Free Meal Logs (Previous Week) - ${new Date().toLocaleDateString()}`,
+          range: 'previous_week'
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to send previous week report via email');
+      }
+
+      enqueueSnackbar('Previous week free meal logs emailed successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error sending previous week logs via email:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to email previous week logs', { variant: 'error' });
+    } finally {
+      setEmailSending(false);
+    }
+  }, [enqueueSnackbar]);
+
+  /**
+   * Export previous week's free meal logs as CSV (download)
+   */
+  const handleExportPreviousWeek = useCallback(async () => {
+    try {
+      setExporting(true);
+      setError(null);
+
+      const response = await fetch('/api/admin/freemeal-logs/export?start_date=previous_week');
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to export previous week logs');
+      }
+
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+
+      // Add timestamp to filename for better organization
+      const date = new Date().toISOString().split('T')[0];
+      link.download = `freemeal_logs_previous_week_${date}.csv`;
+
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      enqueueSnackbar('Previous week free meal logs exported successfully', { variant: 'success' });
+    } catch (error) {
+      console.error('Error exporting previous week logs:', error);
+      setError(error.message);
+      enqueueSnackbar(error.message || 'Failed to export previous week logs', { variant: 'error' });
+    } finally {
+      setExporting(false);
+    }
+  }, [enqueueSnackbar]);
+
+  /**
    * Opens the filter dialog
    */
   const openFilterDialog = useCallback(() => {
@@ -271,6 +406,7 @@ export const useFreemealLogsManager = () => {
     loading,
     loadingDepartments,
     exporting,
+    emailSending,
     
     // Filter and search state
     searchQuery,
@@ -293,6 +429,9 @@ export const useFreemealLogsManager = () => {
     // Actions
     handleSearchChange,
     handleExportLogs,
+    handleSendLogsByEmail,
+    handleSendPreviousWeekByEmail,
+    handleExportPreviousWeek,
     openFilterDialog,
     resetFilters,
     refreshLogs,

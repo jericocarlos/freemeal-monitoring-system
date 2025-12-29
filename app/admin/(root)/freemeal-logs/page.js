@@ -35,6 +35,7 @@ export default function FreemealLogsPage() {
     loading,
     loadingDepartments,
     exporting,
+    emailSending,
     
     // Filter and search state
     searchQuery,
@@ -56,6 +57,9 @@ export default function FreemealLogsPage() {
     // Actions
     handleSearchChange,
     handleExportLogs,
+    handleSendLogsByEmail,
+    handleSendPreviousWeekByEmail,
+    handleExportPreviousWeek,
     openFilterDialog,
     resetFilters,
     refreshLogs,
@@ -76,8 +80,12 @@ export default function FreemealLogsPage() {
           <FreemealHeader 
             onFilterClick={openFilterDialog}
             onExportClick={handleExportLogs}
+            onSendEmailClick={handleSendLogsByEmail}
+            onSendPreviousWeekClick={handleSendPreviousWeekByEmail}
+            onExportPreviousWeekClick={handleExportPreviousWeek}
             onSearchChange={handleSearchChange}
             exporting={exporting}
+            emailSending={emailSending}
             hasActiveFilters={computedValues.hasActiveFilters}
             onResetFilters={resetFilters}
           />

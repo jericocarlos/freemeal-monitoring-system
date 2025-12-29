@@ -7,11 +7,18 @@
  * @component
  */
 
-import { FiFilter, FiDownload, FiSearch, FiX } from "react-icons/fi";
+import { FiFilter, FiDownload, FiSearch, FiX, FiMail, FiMoreVertical } from "react-icons/fi";
 import { Button } from "@/components/ui/button";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 /**
  * Header component for free meal logs with search, filter, and export functionality
@@ -27,8 +34,12 @@ import { Badge } from "@/components/ui/badge";
 export default function FreemealHeader({
   onFilterClick,
   onExportClick,
+  onSendEmailClick,
+  onSendPreviousWeekClick,
+  onExportPreviousWeekClick,
   onSearchChange,
   exporting = false,
+  emailSending = false,
   hasActiveFilters = false,
   onResetFilters,
 }) {
@@ -97,6 +108,51 @@ export default function FreemealHeader({
         >
           <FiFilter className="h-4 w-4" aria-hidden="true" />
           Filter
+        </Button>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="flex items-center gap-2"
+              aria-label="Open quick actions"
+              title="Quick actions"
+            >
+              <FiMoreVertical className="h-4 w-4" aria-hidden="true" />
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent>
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onSendEmailClick?.(); }}>
+              Send this view (Email)
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onSendPreviousWeekClick?.(); }}>
+              Send previous week (Email)
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onExportClick?.(); }}>
+              Export this view (CSV)
+            </DropdownMenuItem>
+
+            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onExportPreviousWeekClick?.(); }}>
+              Export previous week (CSV)
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Send Email Button (kept for direct access) */}
+        <Button
+          variant="outline"
+          onClick={onSendEmailClick}
+          disabled={emailSending}
+          aria-label={emailSending ? "Sending email..." : "Send logs via email"}
+          className="flex items-center gap-2"
+        >
+          <FiMail className="h-4 w-4" aria-hidden="true" />
+          {emailSending ? "Sending..." : "Send Email"}
         </Button>
 
         {/* Export Button */}

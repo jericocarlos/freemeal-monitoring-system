@@ -189,6 +189,19 @@ Audio feedback files are located in `public/sounds/`. You can customize the audi
 | `NEXTAUTH_SECRET` | NextAuth.js secret key | Yes |
 | `NEXTAUTH_URL` | Application URL | Yes |
 
+### SMTP (Email) Configuration
+
+To enable sending CSV reports via email, set the following environment variables (use Mailtrap for testing):
+
+- `SMTP_HOST`
+- `SMTP_PORT`
+- `SMTP_USER`
+- `SMTP_PASS`
+- `FROM_EMAIL` (sender address used in outgoing messages)
+
+**Usage:** On the Admin → Free Meal Logs page click the **Send Email** button, enter the recipient email address, and an email with the CSV attachment will be sent using the configured SMTP provider (Mailtrap recommended for development/testing).
+
+
 ## 🚀 Deployment
 
 ### Production Build
