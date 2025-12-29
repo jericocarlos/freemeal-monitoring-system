@@ -6,9 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "generate-weekly-report": "node scripts/generate-weekly-report.js",
-    "weekly-cron": "node scripts/weekly-cron.js"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
