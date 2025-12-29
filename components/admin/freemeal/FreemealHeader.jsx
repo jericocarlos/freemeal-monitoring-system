@@ -123,23 +123,25 @@ export default function FreemealHeader({
           </DropdownMenuTrigger>
 
           <DropdownMenuContent>
-            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onSendEmailClick?.(); }}>
+            {/* <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onSendEmailClick?.(); }}>
               Send this view (Email)
             </DropdownMenuItem>
 
+            <DropdownMenuSeparator /> */}
+            
             <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onSendPreviousWeekClick?.(); }}>
               Send previous week (Email)
             </DropdownMenuItem>
 
-            <DropdownMenuSeparator />
+            {/* <DropdownMenuSeparator /> */}
 
-            <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onExportClick?.(); }}>
+            {/* <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onExportClick?.(); }}>
               Export this view (CSV)
             </DropdownMenuItem>
 
             <DropdownMenuItem onSelect={(e) => { e.preventDefault(); onExportPreviousWeekClick?.(); }}>
               Export previous week (CSV)
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
 
