@@ -59,7 +59,7 @@ export default function FreemealLogsPage() {
     handleExportLogs,
     handleSendLogsByEmail,
     handleSendPreviousWeekByEmail,
-    handleExportPreviousWeek,
+    // handleExportPreviousWeek,
     openFilterDialog,
     resetFilters,
     refreshLogs,
@@ -72,9 +72,6 @@ export default function FreemealLogsPage() {
         role="main"
         aria-label="Free Meal Logs Management"
       >
-        {/* Dashboard Statistics */}
-        {/* <DashboardStats /> */}
-
         {/* Main Free Meal Logs Card */}
         <Card>
           <FreemealHeader 
@@ -82,7 +79,7 @@ export default function FreemealLogsPage() {
             onExportClick={handleExportLogs}
             onSendEmailClick={handleSendLogsByEmail}
             onSendPreviousWeekClick={handleSendPreviousWeekByEmail}
-            onExportPreviousWeekClick={handleExportPreviousWeek}
+            // onExportPreviousWeekClick={handleExportPreviousWeek}
             onSearchChange={handleSearchChange}
             exporting={exporting}
             emailSending={emailSending}

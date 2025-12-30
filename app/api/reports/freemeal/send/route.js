@@ -45,11 +45,33 @@ export async function POST(req) {
       }
     });
 
+    // Friendly sender name (defaults to 'Pantry') with configured email
+    const fromName = process.env.FROM_NAME;
+    const fromAddress = process.env.FROM_EMAIL ? `${fromName} <${process.env.FROM_EMAIL}>` : `${fromName} <no-reply@eastwestbpo>`;
+
     await transporter.sendMail({
-      from: process.env.FROM_EMAIL,
+      from: fromAddress,
       to,
       subject: subject || `Free Meal Logs - ${new Date().toLocaleDateString()}`,
-      text: 'Please find attached the Free Meal logs CSV report.',
+      html: `
+            <p>Good Day,</p>
+
+            <p>
+              Attached is the <strong>Free Meal Logs CSV Report</strong> for the <strong>previous week
+              (Monday through Sunday)</strong>.
+            </p>
+
+            <p>
+              This report is <strong>sent every Monday at 12:00 PM.</strong>
+            </p>
+
+            <p>
+              Please review the attached CSV file for detailed information on free meal claims made during this period.
+            </p>
+
+            <p>Thank you.</p>
+            `,
+
       attachments: [
         { filename, content: csv, contentType: 'text/csv' }
       ]

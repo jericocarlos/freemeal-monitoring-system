@@ -146,7 +146,7 @@ export default function FreemealHeader({
         </DropdownMenu>
 
         {/* Send Email Button (kept for direct access) */}
-        <Button
+        {/* <Button
           variant="outline"
           onClick={onSendEmailClick}
           disabled={emailSending}
@@ -155,7 +155,7 @@ export default function FreemealHeader({
         >
           <FiMail className="h-4 w-4" aria-hidden="true" />
           {emailSending ? "Sending..." : "Send Email"}
-        </Button>
+        </Button> */}
 
         {/* Export Button */}
         <Button 
