@@ -27,9 +27,7 @@ export async function POST(req) {
     const useRange = range === 'previous_week' || start_date === 'previous_week' || end_date === 'previous_week';
     const params = useRange ? { search, logType: log_type, range: 'previous_week' } : { search, logType: log_type, startDate: start_date, endDate: end_date };
 
-    
     console.log('Generating Free Meal CSV with params:', params);
-    
     
     // Generate CSV
     const { csv, filename } = await generateFreemealCsv(params);
