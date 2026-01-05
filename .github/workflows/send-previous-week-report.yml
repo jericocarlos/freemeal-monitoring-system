@@ -10,7 +10,7 @@ on:
   workflow_dispatch: # allows manual run
 
 jobs:
-  report-job:
+  send-report:
     runs-on: windows-latest
 
     steps:
@@ -24,7 +24,4 @@ jobs:
 
     - name: Send previous week report
       run: |
-        url="${{ secrets.REPORT_API_URL }}"
-        token="${{ secrets.CRON_SECRET }}"
-        
-        curl.exe -k -X POST $url -H "Authorization: Bearer $token" -H "Content-Type: application/json"
+        curl.exe -k -X POST ${{ secrets.REPORT_API_URL }} -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" -H "Content-Type: application/json"
