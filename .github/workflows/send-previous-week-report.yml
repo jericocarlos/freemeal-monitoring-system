@@ -14,9 +14,4 @@ jobs:
       - name: Call report API
         shell: pwsh
         run: |
-            $url = "http://localhost:3000/api/reports/send-previous-week"
-            $token = "083ef01b86cfeebc927307bc7ef59879828408a1cbbb33b50f6c4c3028a656f8"
-
-            curl.exe -k -X POST $url `
-            -H "Authorization: Bearer $token" `
-            -H "Content-Type: application/json"
+            curl.exe -X POST http://localhost:3000/api/reports/send-previous-week -H "Authorization: Bearer 083ef01b86cfeebc927307bc7ef59879828408a1cbbb33b50f6c4c3028a656f8"
