@@ -3,12 +3,12 @@ name: Send Previous Week Free Meal Report
 on:
   schedule:
     # Every Monday at 12:00 PM (UTC)
-    - cron: '10 11 * * 1'
+    - cron: '0 12 * * 1'
   workflow_dispatch: # allows manual run
 
 jobs:
   send-report:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Call report API
