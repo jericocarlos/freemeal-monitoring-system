@@ -268,7 +268,7 @@ export const useFreemealLogsManager = () => {
       setEmailSending(true);
       setError(null);
 
-      const to = 'jcarlos@eastwestbpo.com'; //window.prompt('Enter recipient email address for previous week logs');
+      const to = 'jcarlos@eastwestbpo.com';
       if (!to) {
         setEmailSending(false);
         return;

@@ -1,0 +1,18 @@
+name: Send Previous Week Free Meal Report
+
+on:
+  schedule:
+    # Every Monday at 12:00 PM (UTC)
+    - cron: '10 11 * * 1'
+  workflow_dispatch: # allows manual run
+
+jobs:
+  send-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call report API
+        run: |
+          curl -X POST "${{ secrets.REPORT_API_URL }}" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json"
