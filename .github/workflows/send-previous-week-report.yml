@@ -1,17 +1,38 @@
 name: Send Previous Week Free Meal Report
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     # Every Monday at 12:00 PM (UTC)
     - cron: '0 12 * * 1'
   workflow_dispatch: # allows manual run
 
 jobs:
-  send-report:
+  report-job:
     runs-on: windows-latest
 
     steps:
-      - name: Call report API
-        shell: pwsh
-        run: |
-            curl.exe -k -X POST http://localhost:3000/api/reports/send-previous-week -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'  # Adjust as needed
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Start API server
+      run: |
+        npm run start &  # Runs your server in the background
+        sleep 10         # Waits for the server to fully start
+
+    - name: Send previous week report
+      run: |
+        url="http://localhost:3000/api/reports/send-previous-week"
+        token="${{ secrets.CRON_SECRET }}"
+        
+        curl.exe -k -X POST $url -H "Authorization: Bearer $token" -H "Content-Type: application/json"
