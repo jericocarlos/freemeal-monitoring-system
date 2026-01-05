@@ -14,8 +14,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Install dependencies
-      run: npm ci
+    # - name: Install dependencies
+    #   run: npm ci
 
     - name: Start API server
       run: |
