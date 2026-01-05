@@ -24,4 +24,4 @@ jobs:
 
     - name: Send previous week report
       run: |
-        curl.exe -k -X POST ${{ secrets.REPORT_API_URL }} -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" -H "Content-Type: application/json"
+        curl.exe -k -X POST ${{ secrets.REPORT_API_URL }} -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
