@@ -23,8 +23,11 @@ jobs:
         sleep 10         # Waits for the server to fully start
 
     - name: Send previous week report
-      run: |
-        curl.exe -X POST "${{ secrets.REPORT_API_URL }}" -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+      shell: pwsh
       env:
-          CRON_KEY: ${{ secrets.CRON_SECRET }}
-          REPORT_API_URL: ${{ secrets.REPORT_API_URL }}
+        REPORT_API_URL: ${{ secrets.REPORT_API_URL }}
+        CRON_KEY: ${{ secrets.CRON_SECRET }}
+      run: |
+        curl.exe -X POST "$env:REPORT_API_URL/previous-week" `
+          -H "Authorization: $env:CRON_KEY"
+
