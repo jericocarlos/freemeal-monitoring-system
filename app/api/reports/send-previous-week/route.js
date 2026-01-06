@@ -52,19 +52,23 @@ export async function POST(req) {
       to,
       subject: `Free Meal Logs – Previous Week`,
       html: `
-        <p>Good day,</p>
+            <p>Good Day,</p>
 
-        <p>
-          Attached is the <strong>Free Meal Logs CSV Report</strong> for the
-          <strong>previous week (Monday–Sunday)</strong>.
-        </p>
+            <p>
+              Attached is the <strong>Free Meal Logs CSV Report</strong> for the <strong>previous week
+              (Monday through Sunday)</strong>.
+            </p>
 
-        <p>
-          This report is generated automatically.
-        </p>
+            <p>
+              This report is <strong>sent every Monday at 12:00 PM.</strong>
+            </p>
 
-        <p>Thank you.</p>
-      `,
+            <p>
+              Please review the attached CSV file for detailed information on free meal claims made during this period.
+            </p>
+
+            <p>Thank you.</p>
+            `,
       attachments: [
         {
           filename,
