@@ -67,6 +67,8 @@ export async function POST(req) {
               Please review the attached CSV file for detailed information on free meal claims made during this period.
             </p>
 
+            <p>This is an auto-generated email. Please do not reply.</p>
+
             <p>Thank you.</p>
             `,
       attachments: [
