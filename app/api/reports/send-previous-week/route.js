@@ -11,7 +11,7 @@ export async function POST(req) {
 
     if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
       return NextResponse.json(
-        { error: 'Unauthorizeddddddddddd' },
+        { error: 'Unauthorized' },
         { status: 401 }
       );
     }
