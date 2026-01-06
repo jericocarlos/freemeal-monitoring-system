@@ -48,7 +48,7 @@ async function getUserPermissions(role) {
 
   try {
     // Make API call to get permissions
-    const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://ewbpo-meap:3000';
+    const baseUrl = process.env.NEXTAUTH_URL || process.env.VERCEL_URL || 'http://10.42.10.59:3000';
     const apiUrl = `${baseUrl}/api/admin/role-permissions/by-role?role=${encodeURIComponent(role)}`;
     
     console.log(`[MIDDLEWARE] Calling API: ${apiUrl}`);
