@@ -14,8 +14,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # - name: Install dependencies
-    #   run: npm ci
+    - name: Install dependencies
+      run: npm ci
 
     - name: Start API server
       run: |
@@ -25,3 +25,5 @@ jobs:
     - name: Send previous week report
       run: |
         curl.exe -X POST ${{ secrets.REPORT_API_URL }} -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}"
+      env:
+          CRON_KEY: ${{ secrets.CRON_SECRET }}
