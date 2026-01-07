@@ -40,7 +40,7 @@ export default function LoginPage() {
       if (['superadmin', 'admin'].includes(role)) {
         router.replace('/admin/employees-management');
       } else if (['hr'].includes(role)) {
-        router.replace('/admin/attendance-logs');
+        router.replace('/admin/employees-management');
       } else {
         router.replace('/admin');
       }
