@@ -43,6 +43,8 @@ export default function LoginPage() {
         router.replace('/admin/employees-management');
       } else if (['recruitment'].includes(role)) {
         router.replace('/admin/trainees-management');
+      } else {
+        router.replace('/admin');
       }
     }
   }, [session, router]);
