@@ -41,8 +41,8 @@ export default function LoginPage() {
         router.replace('/admin/employees-management');
       } else if (['hr'].includes(role)) {
         router.replace('/admin/employees-management');
-      } else {
-        router.replace('/admin');
+      } else if (['hr'].includes(role)) {
+        router.replace('/admin/trainees-management');
       }
     }
   }, [session, router]);
