@@ -268,8 +268,8 @@ export const useFreemealLogsManager = () => {
       setEmailSending(true);
       setError(null);
 
-      //const to = 'sfhr@eastwestbpo.com'; // Predefined recipient for production
-      const to = 'jcarlos@eastwestbpo.com'; // Predefined recipient for testing
+      const to = 'sfhr@eastwestbpo.com'; // Predefined recipient for production
+      //const to = 'jcarlos@eastwestbpo.com'; // Predefined recipient for testing
       if (!to) {
         setEmailSending(false);
         return;
