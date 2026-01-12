@@ -102,6 +102,11 @@ export default function Home() {
               animate="visible"
               exit={{ opacity: 0, y: 20 }}
               variants={ANIMATIONS.fadeIn}
+              onAnimationComplete={() => {
+                setTimeout(() => {
+                  window.location.reload();
+                }, 3000); // delay after animation
+              }}
             >
               {/* Left side - Employee Info */}
               <EmployeeCard 
